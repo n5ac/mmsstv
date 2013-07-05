@@ -1,0 +1,860 @@
+What's new in MMSSTV Version 1.13A
+         September 29, 2010
+         JE3HHT Makoto Mori
+         Translated into English by JA7UDE Oba
+
+***********************************************************************
+Revision history Ver1.13 -> Ver1.13A
+***********************************************************************
+- Fixed the sound card selection problem
+- Fixed minor glitches and improved several functions
+
+***********************************************************************
+Revision history Ver1.12 -> Ver1.13
+***********************************************************************
+- Fixed the custom sound, which was disabled in version 1.12
+- Updated the URL of the English web site
+- Updated the introduction for the JASTA contest
+- Added COM8 to COM16 selections
+- Added CW menu (right click on the CW button)
+- Added radio command menu
+- Added radio command for some Yaesu radios
+- Added an option that lowers the tone frequency by 1000Hz (use -i option on start)
+
+***********************************************************************
+Revision history Ver1.11G -> Ver1.12
+***********************************************************************
+- Updated the duplication checker of the JASTA contest
+- Changed the sound card selection scheme
+
+***********************************************************************
+Revision history Ver1.11 -> Ver1.11G
+***********************************************************************
+- Added a link to the English CHM help file
+- Fixed the log file location, the same folder where the EXE file resides
+- Added the RX window clear button to the pop-up menu
+- Added a gateway to Turbo Hamlog/Win version 5 (Tnx to JG1MOU)
+- Added narrow band modes (MP-N, MC-N)
+- Added FSKID.TXT in the package
+- Improved AFC for narrow band modes
+- Fixed typo in the English mode
+
+***********************************************************************
+Revision history Ver1.10 -> Ver1.11
+***********************************************************************
+- Fixed a bug of the FSKID (Contest NR)
+
+***********************************************************************
+Revision history Ver1.09 -> Ver1.10
+***********************************************************************
+
+- Added links to the call for participations of NVCG and JASTA contests to 
+the Help menu.
+
+- Added the CW button to the TX window. Right click on the button to
+specify the text to send.
+
+- Added the contest number option to the FSKID.  Click on Setup logging 
+option and Misc tab.  Check Add contest NR to the FSKID box.
+
+- Added the sound option to the template color bar.
+
+- Added an option that allows the user to select right or left channel for 
+the sound output.  On the source pane of the Misc tab, selecting Right or 
+Left enables the TxCH check box.  If the TxCH is checked, MMSSTV outputs the 
+TX sound only on the right or left channel selected.
+
+- Added TxID button in the Log pane of the main window.
+
+- Replaced the Clear button in the RX window with the Lock button. If 
+LOCKed, MMSSTV will not stop the RX scan even in QRM or QSB.
+
+- Added the log backup function.  Select Setup logging and click on Misc 
+tab.  Check Make backup box to enable the function. MMSSTV automatically 
+makes the log backup with the name of "xxxx_BAK.MDT".
+
+- Improved the function and manipulation of image clipper.  Pop-up menus are 
+moved to Main menus.  Added Make space button. Added Rotation buttons.
+
+- Improved the text and color setup functions in the template window.
+Added the increase and decrease font size buttons.
+Added the bold and italic font buttons.
+Added the user-customizable font buttons (F1-F4).  Right click on them
+to register fonts.
+
+- Improved the speed of character mapping in the template window.
+Added the fast code option in the pop-up menu. Some PCs running in the
+16-bit color mode does not work well with this code. In that case,
+unselect the fast code option.
+
+- Revised the rule of NVCG contest (1.09F)
+
+- Improved the precision of the TONE frequency (1.09F)
+
+- Added the 48KHz sound clock option for the optical connection (S/PDIF)
+  (may use more CPU power)
+
+- Improved the DSP calculation speed (1.09F)
+
+- Fixed some minor bugs and applied a few improvements.
+
+***********************************************************************
+Revision history Ver1.08 -> Ver1.09
+***********************************************************************
+- Improved the program termination speed
+- Added an option that turns off the font smoothing.
+- Added EXTPTT port function (EXTFSK.DLL required).
+- Added custom log link
+- Added custom RadioCommand
+- Added custom sound
+- Fixed minor bugs and improved several functions.
+
+==============================
+Font smoothing
+==============================
+When the Windows option "Smooth edges of screen fonts" is engaged, the 
+background color of the template sometimes leaks at the edges of characters 
+on the MMSSTV template window.
+
+There are two ways to solve this problem.
+1) Turn the Windows option off.  To do so, you will find the option select 
+at:
+	Windows XP: Control Panel, System, Advanced, Performance, Visual effects
+	Windows 2000: Control Panel, Screen, Effects
+	Windows 98: Control Panel, Screen, Effects
+2) Change the MMSSTV template option.  Right click on the template window, 
+select Options, and check Disable font smoothing.  When this option is 
+selected, the font smoothing function of Windows is disabled only within the 
+MMSSTV template window.
+
+
+====================
+EXTPTT port
+====================
+EXTPTT port is provided for the PTT operation using a special USB device, 
+which was originally made for FSK keying.  To make use of this port, select 
+EXTPTT in the PTT port drop-down list of TX pane of Setup MMSSTV.  
+EXTFSK.DLL is prerequisite for the operation.  For more information, refer 
+to the following web site.
+http://www.archi.is.tohoku.ac.jp/~ooba/ja7ude/homebrew.htm
+
+
+
+***********************************************************************
+Revision history Ver1.07 -> Ver1.08
+***********************************************************************
+
+- Added notch filter
+- Added a function that automatically readjusts the off-synchronized image 
+when filters are switched
+- Added MSG button in the text & color window
+- Changed the number of S.Templates-image pages to 4
+- Added dupe check scheme for JASTA contest
+- Added LMS filter modes
+- Fixed minor bugs and put fine improvements to the program
+
+================
+Notch filter
+================
+
+I have added an FIR notch filter in RX.  To activate the notch filter, left 
+click in the spectrum or waterfall window.  The notch frequency is marked 
+with a small triangle.  To deactivate the notch filter, right click anywhere 
+in the window.
+
+The notch filter eliminates the beat, but it slightly degrades the image 
+quality.  If the notch filter frequency is put closely to the 
+synchronization signal, the RX operation sometimes stops for the weak 
+signals if auto-stop function is turned on.
+
+
+  Sound ---> Notch ---> LMS -+-> BPF ---> Demodulator
+                             |
+                             --> Spectrum display
+
+=============================================
+MSG button in the "Text & Color" window
+=============================================
+In the template window, you can add text by pushing "T" button just under 
+the template window.  Double clicking the added text gets the Text & Color 
+window popped up.  You can find MSG button at the bottom center of the 
+window.  When you push the button, a big square pane appears in the window.  
+Input pre-defined text lines in the window.  The text can include macro 
+keywords.  Double clicked line is copied to the text box.
+For example, input the text lines in the white pane as follows.
+	Hello
+	Good morning
+	Good afternoon
+	Good evening
+	73
+If you double click on 73, the content of the text box becomes 73.
+
+
+
+===================================================
+Added dupe check scheme for JASTA
+===================================================
+Click on Option and select Setup logging.  Select MISC tab.  You will find 
+JASTA contest in Dupe check pane.  If MMSSTV detects dupe, the color of the 
+callsign in the main window changes red.  The dupe conditions are:
+
+Callsign only
+	If the same callsign has been found regardless of band or mode
+
+Hit on the same band
+	If the same callsign has been found in the same band
+
+JASTA contest
+	If the same callsign has been found "in the SSTV mode" and "on the same 
+day" and "on 14MHz or upper bands."
+
+
+
+
+=============================
+LMS filter selection
+=============================
+Three LMS filter modes can be selected by right clicking on the LMS button 
+in the DSP pane of the main window.
+
+- Noise smoothing:	Conventional (default)
+- Auto notch (fast):	Automatic notch filter with fast response
+- Auto notch (slow):	Automatic notch filter with slow response
+
+The response of the automatic notch filter is intentionally set slow so as 
+not to degrade the image quality.  Even set so, some images will be 
+affected.
+
+
+
+***********************************************************************
+Revision history Ver1.06 -> Ver1.07
+***********************************************************************
+
+- Added multipage for folder thumbnail
+- Implemented fast thumbnail browsing
+- Added OLE support
+- Fixed some bugs and applied minor improvements
+
+
+======================================
+Multipage for folder thumbnail
+======================================
+
+The thumbnail window is useful for managing your picture resources.  With 
+MMSSTV 1.07, you can view the pictures stored in two or more different 
+folders in one thumbnail window.
+
+To open the thumbnail window, click on "View" and select "Always show 
+thumbnails of files folder."  Right click on any thumbnail in the thumbnail 
+window and select "Options" and "Create new page."  Select the folder that 
+you want to add the thumbnail window.  You will find a new tab added at the 
+top of the window.  If you want to change the tab name, select "Options" and 
+"Rename page."  The window can have up to 10 pages.
+
+
+==================================
+Fast thumbnail browsing
+==================================
+
+If the size of the picture or template is large, it should take substantial 
+time to load and show all the thumbnail images in the folder thumbnail 
+window.  To get the load and show operation faster, MMSSTV version 1.07 
+makes an index of the thumbnails once while loaded.  MMSSTV uses the index 
+for the next time on for faster thumbnail browsing.
+
+MMSSTV creates the index in the FIndex folder under the MMSSTV directory.  
+The index contains the view information and the thumbnail bitmaps.  The 
+index uses some disk spaces, but it significantly saves the memory and 
+resources.
+
+If you do not want to make the index, right click on the thumbnail, select 
+"Options" and uncheck "Fast access with index."  MMSSTV does not make the 
+index as version 1.06 or earlier.  You can individually enable or disable 
+this indexing feature for each folder.
+
+* MMSSTV does not generate any file in the referred folders.
+
+===============
+OLE support
+===============
+
+MMSSTV now supports OLE (Object Linking and Embedding).  If the object is 
+embedded (or linked) in the template, you can make use of the various 
+functions offered in the object.
+
+* Object means the whole or some part of the document in another 
+application.
+
+* What kind of object can you utilize in MMSSTV?  It is dependent on the OLE 
+application you have.  If you have installed a word processor, for example, 
+you can use the word processor document as well as all the functions, such 
+as character effect and picture drawing, provided in the word processor.
+
+
+1. Object embedding
+
+To embed an object in the template, use one of the following five methods.
+
+- Right click on the template window of MMSSTV, select Object -> Insert, and 
+make a new object to embed.  You can embed the existing file or place a link 
+to it in the template, too.
+
+- Make an object in the other application and copy it to the clip board.  
+Right click on the template window of MMSSTV, and select Object -> Paste.
+
+- Drag and drop the target object file from Explorer or My computer to the 
+MMSSTV template.  It should be noted, however, that BMP, JPG, WMF, MTM, MTI, 
+and DLL files are not embedded as an OLE object.
+
+- Open the folder thumbnail window (View -> Always show thumbnails of files 
+folder), and right click on the target picture in the window.  Select "Embed 
+to Template as OLE."  In this case, the embedded picture always becomes a 
+bitmap OLE.
+
+- Open the thumbnail folder as the OLE object type and double click the 
+target thumbnail.  You can use drag&drop, too.
+
+2. Object editing
+
+To edit the embedded object, just double click it.  Another way to do this 
+is keep the object selected and push the Set color button.  If you cannot 
+start the server application, right click on the target object and select 
+Object -> Edit.
+
+The server application of the embedded object works as the editor.  Please 
+refer to the help file of the server application.  For example, Windows 
+Paint is invoked for the target application when a BMP file is double 
+clicked.
+
+3. Object displaying and resizing
+
+MMSSTV displays the object in the overlay mode.  If you do not want to get 
+the background transparent, right click on the object, select Object, and 
+uncheck Overlay.
+
+When "Object" -> "Stretch as bitmap" is checked, MMSSTV uses a bitmap 
+resizing code instead of a metafile resizing code.  Generally speaking, the 
+metafile resizing code gives better results for the characters with special 
+effect.  The bitmap resizing code, on the other hand, gives better result 
+for image objects like photographs.
+
+4. Custom item
+
+If you are not satisfied with the MMSSTV graphic tools or the OLE functions, 
+you can embed a custom item that you have created by yourself.
+
+To embed a custom item, go with "Object" -> "Insert custom item," and select 
+the target item.  Another way to do this is to open the folder thumbnail as 
+Custom item type and double click the target thumbnail (or drag & drop it to 
+the template).
+
+For the implementation of the custom item, refer to ECUSTOM.TXT, which is 
+included in the PerImg package.
+
+
+
+
+***********************************************************************
+Revision history Ver1.05 -> Ver1.06
+***********************************************************************
+
+- Added VFO polling for JRC JST-245
+- Supported the slash zero in Hangul font
+- Added several SSTV modes
+- Improved the automatic synchronization function
+- Had the timing of the B/W 8-sec mode adjusted to Robot 1200C
+- Added a special font manipulation for East Asian languages
+- Added customizable VOX tone
+- Took measures not to lost sound
+- Added RTS control for muting audio while receiving a picture
+- Added overlay function
+- Fixed some bugs and applied minor improvements
+
+
+==========================
+Special font manipulation for East Asian languages
+==========================
+
+Version 1.05G has a special font manipulation for East Asian languages.  In 
+case you want to use a new language that is different from your default one, 
+you must install the font and code page of the new one.  If you have only 
+the font installed, you might encounter problems in several operations 
+including vertical unfolding.
+
+MMSSTV treats the codepages of the following languages in a special manner:
+
+	932	Japanese		Verified
+	949	Hangul			Verified
+	950	Chinese (BIG5)		Not verified
+	936	Chinese (GB2312)	Not verified
+
+
+======================
+Sound lost
+======================
+
+I have figured out that some soundcards are likely to lose sound, which 
+results in synchronization drift.  I have added a code to try fixing the 
+problem.  It is effective in some degree, but does not completely solve the 
+problem.  I recommend you to install the latest device driver of your 
+soundcard.
+
+If you still have the problem, try turning off LoopBack in the TX page and 
+increasing the FIFO depth in the Misc page.
+
+
+==============
+MP/MR/ML modes
+==============
+
+
+MP mode: It is based on the color difference scheme that the PD mode uses.  
+This mode should be useful for reducing multi-path distortion and jitter.  
+The scan time for each pixel is longer than the other modes, but the color 
+information along the vertical axis is compressed.
+
+MR/ML mode: It is based on the color difference scheme that the Robot 24/72 
+mode uses.  This mode is aimed for offering good resolution in good condx.  
+The color information along the horizontal axis is compressed.
+
+These modes are not new to SSTV actually, but I have added them by way of 
+trial.  In particular, I have considered good trade-off between the 
+transmission time, picture size, and quality.  As a new trial, the VIS 
+signal is expanded to 16 bits.  Refer to Mode.txt for the details of the new 
+modes and their VIS format.
+
+
+
+================
+B/W 8-sec mode
+================
+
+Changing with times including the old monochrome generation, the B/W 8-sec 
+mode seems to have several "dialects" in terms of the aspect ratio and the 
+timing.
+MMSSTV has adjusted the timing to the Robot 1200C scan converter, which is 
+used as the standard of the VIS signals.  When you come across a picture 
+with different timing, turn Auto slant on or push the niconico mark button 
+in the Sync window.
+
+
+
+================
+RTS control while scan
+================
+
+I have added "RTS while scan" option in the MMSSTV Setup window.  The 
+behavior of the COM port signals, that is, DTR, RTS, and TXD can be selected 
+as follows:
+
+[RTS while scan = OFF]
+		RX	TX	SCAN (receiving a picture)
+	DTR	OFF	ON	OFF
+	RTS	OFF	ON	OFF
+	TXD	---	---	--- (no control)
+
+[RTS while scan = ON]
+		RX	TX	SCAN (receiving a picture)
+	DTR	OFF	ON	OFF
+	RTS	OFF	ON	ON
+	TXD	NoBreak	NoBreak	Break
+
+
+==========
+VOX tone
+==========
+
+If you use the COM port to switch PTT or if you have a responsive VOX 
+interface, you can eliminate the VOX tone, which is sent before the picture. 
+  Select "User defined" in the VOX tone pane on the TX page of Setup MMSSTV. 
+  Push Edit button and delete all the definitions.  MMSSTV no longer 
+generates the tone for triggering VOX prior to sending a picture.
+
+
+==============
+Overlay (superimpose) function
+==============
+
+In the template, you can place an image that is superimposed on the TX 
+picture.  By using an image that has a uniform background color, such as an 
+illustration, you would be able to make amusing effects on your picture.
+
+In the image, all the pixels that have the transparent color are 
+transparent, that is, invisible on the TX picture.  The transparent color is 
+defined by the color of the transparent point in the image.  The default 
+position of the transparent point is the upper left corner of the image.
+
+Here is a sample procedure to use the overlay function.  In the template 
+window, push Draw picture button (a small button whose face has the sun and 
+mountains), and draw a rectangle that specifies the image size and position 
+in the template window.  You should have the Choose picture window popped 
+up.  Select Overlay in the source pane, and load an image.  Left click on 
+somewhere in the picture.  The clicked point is the new transparent point, 
+that is, the color of the point becomes the new transparent color.   Try 
+right clicking somewhere in the image.  All the pixels that have the same 
+color of the clicked point are changed to the current transparent color.
+
+If the source image is stored in the JPEG format, the background color is 
+not always uniform owing to the image compression effect.  This results in 
+color leak in the overlay image.  In such a case, try using the color 
+smoothing function, which is available at the right side of the Choose 
+picture window, in order to alleviate the color leak.
+
+When the size of the overlay image is changed in the template window, MMSSTV 
+gives priority to the color smoothness over the image quality.  If the image 
+quality is degraded, change the size of the image in the bitmap format, and 
+then convert it to the overlay image.  The size change in the bitmap format, 
+however, gives priority to the image quality, and thus it would degrade the 
+color smoothness.  In this case, try using the color smoothing function to 
+alleviate the color leak.
+
+
+
+
+***********************************************************************
+Revision history Ver1.04 -> Ver1.05
+***********************************************************************
+- Added two window layouts
+- Added an optional window for the control buttons
+- Added an option that attaches the RX window to the WINDOWS desktop.
+- Added double-click short-cut operations for the stocked pictures, stocked 
+templates, folder thumbnails.
+- Added 320x240 image manipulating schemes
+- Added a repeater function
+- Fixed a bug that caused the resource shortage in Windows 95/98/ME
+- Fixed some bugs and applied minor improvements
+
+
+============
+Window layouts
+============
+You can select one of three window layouts by clicking "View" and selecting 
+"Design."
+
+[Standard]
+  This is the conventional MMSSTV window layout.  All the information is 
+shown in one window.
+
+[Separate stock view]
+  The stock window is detached from the main window.
+
+[Separate all views]
+  All the windows are separated.
+
+Each detached window can be moved and resized independently.
+
+
+====================
+Control buttons window
+
+====================
+  Click on "View" and select "Always show control buttons" to open an 
+optional window dedicated to the control buttons.
+
+[Stop RX]
+  Stop the RX operation immediately and go into the stand-by state (Auto).
+
+[ReSync]
+  Make the synchronization again.
+
+[Lock RX]
+  When the button is depressed, MMSSTV turns off "Auto stop" and "Auto 
+restart," and therefore it won't stop the RX scan even in QRM and/or QSB.  
+When the button is not depressed, "Auto stop" and "Auto restart" are 
+resumed.
+
+[CopyHist]
+  If the RX image is not copied to the history, press this button to force 
+the copy.
+
+[TX(F9)]
+  It functions just same as the TX button of the TX window.  You can use F9 
+key to switch TX/RX.
+
+
+==============================================
+Attaching the RX window to the WINDOWS desktop
+==============================================
+  When you have activated "Always show RX viewer" option, you can attach the 
+window to the WINDOWS desktop.  Right click the RX window and select "Child 
+of a desktop window" in the pop-up menu.
+  In this mode, the RX viewer remains active, even if the main MMSSTV window 
+is minimized.
+
+
+=========================
+320x240 image manipulation
+=========================
+  Click on "Edit" and select "Handling of 320x240" to settle how to 
+manipulate 320x240 image sources.  This selection is also applied to the 
+combination of the 640x480 source and 640x496 TX images.
+
+[Vertical stretching]
+@The image is vertically stretched.  The image aspect ratio is not 
+reserved.
+
+[Auto stretching]
+  The image is horizontally and vertically stretched. The aspect ratio is 
+reserved.  The original image slightly loses the left and right edges.  This 
+is the operation that MMSSTV used in the earlier versions.
+
+[No stretching]
+  The image size is unchanged.  The TX image has 16 vacant lines at the 
+bottom.
+
+[Shift picture for the header]
+  The image size is unchanged.  The TX image has 16 vacant lines at the top 
+for the header.
+
+  It should be noted that this manipulation does not work for the image that 
+derived through the image clipper.
+
+
+================
+SSTV repeater function
+================
+  MMSSTV can work as an SSTV repeater.  Refer to Repeater.txt for details.
+
+
+***********************************************************************
+Revision history Ver1.03 -> Ver1.04
+***********************************************************************
+- Improved the user interface for the character input in the template
+- Added perspective and 3-D effects for the template text
+- Corrected some bugs and applied minor improvements
+
+***********************************************************************
+Revision history Ver1.02 -> Ver1.03
+***********************************************************************
+- Added "FFT demodulator" mode in the spectrum display
+- Added AFC
+- Added Undo in the pop-up menu for the template
+- Corrected some bugs and applied minor improvements
+
+================
+Spectrum display
+================
+The user can select one of "OFF," "FFT," or "FM demodulator" mode for the 
+spectrum display.  The default has been set to FM demodulator.  If you want 
+to use the conventional FFT mode, change back it to "FFT."
+
+* If you draw CMT-HELL, which was made by PY4ZBZ, in the waterfall of 
+MMSSTV, you must select "FFT."
+
+The FM demodulator uses another wide-band FM demodulator in addition to the 
+picture demodulator.  It draws the chart as the function of the rate of 
+incidence at each frequency.  Because its computation process is much 
+simpler than the FFT, it gives good response even to the short pulse like a 
+synchronization signal, but it does not reflect the signal level.
+
+The FFT and FM demodulator observe the signal before the SSTV BPF in order 
+to see the signals outside of the BPF, too.
+
+   --- Sound in --+--> SSTV demodulator
+                  |
+                  ---> Spectral (FFT / FM demodulator)
+
+
+==============
+AFC
+==============
+AFC is activated by pushing the AFC button in the DSP pane on the main 
+window.  The default is ON.
+When AFC is locked to the signal, the triangle marker on the synchronization 
+frequency line is displayed in blue.  When AFC is unlocked, the triangle 
+marker is displayed in red.  During in red, the response to the frequency 
+discrimination becomes slow.
+
+* The AGC in the previous versions was deleted because it seemed to offer no 
+improvements.
+
+
+***********************************************************************
+Revision history: Ver1.01 -> Ver1.02
+***********************************************************************
+- Added the Hilbert transform method in the FM decoder
+- Improved the processing speed of the low-level sound processing
+- Added the TX-offset button on the Sync window
+- Added High-accuracy slant adjustment method
+- Added Vari-SSTV function
+- Debugged the automatic start function
+- Corrected some bugs and enhanced some functions
+
+
+==================================
+Added Hilbert transform method in the FM decoder
+==================================
+The figure below shows the flow of the Hilbert transform decoder.  This idea 
+was given by JA6UHL Nishimura-san (MNI TNX to JA6UHL).
+
+  --+> Delay(N) -> Real
+    |                |==> ATAN --> Differentiator --> LPF --> Pic. data
+    --> FIR(2N) --> Image
+
+
+========================
+Low-level sound buffer
+========================
+I enhanced the sound buffer processing.  You can set the FIFO sizes for TX 
+and RX in the option menu.
+If you often loose the sound, that is, loose the synchronization, try 
+enlarging the RX FIFO or TX FIFO.  Giving higher priority to the sound 
+processing is another way of alleviate the sound loosing.
+
+
+==============
+High-accuracy slant adjustment
+==============
+MMSSTV uses the least square method to solve the linear equation for 
+analyzing the synchronization timings.  For high quality RX signals, it will 
+give the error less than 2ppm.
+To start the high-accuracy slant adjustment, push the NikoNiko button 
+(comment by JA7UDE: the smiley button).  You also can start it by right 
+clicking on the sync or RX window and selecting High-accuracy slant 
+adjustment in the pop-up menu.  It should be noted that you must have 
+received at least 16 scan lines to make this adjustment operational.  The 
+more the scan lines, the better the accuracy.
+
+
+===============
+Adjustment of TX offset
+===============
+Assuming that you have the RX clock calibrated, MMSSTV transmits the signal 
+and receives it through the external loop back.
+After you have adjusted the slant (push the NikoNiko smiley button), push 
+the TX button in the Sync window.  MMSSTV automatically records the TX 
+offset frequency.
+
+
+========
+VariSSTV
+========
+VariSSTV, which is proposed by Mr. Samuel Hunt, is a method to protect the 
+final device of the TX.  He says that different colors have different 
+brightness and therefore making the power lower in the way shown below gives 
+better noise immunity.
+
+Sync signal	100%
+Red		29.8%
+Green		58.8%
+Blue		11%
+
+For details, visit http://www.supersam.co.uk/sstvpwer.htm.
+
+I have no idea how it is effective.  Please give it a try by yourself.  Go 
+Option, Setup MMSSTV, TX tab, and check the VariSSTV box under the digital 
+output level slider.  This is not operational in Robot36 or Robot72.
+
+
+***********************************************************************
+Revision history Ver1.00 -> Ver1.01
+***********************************************************************
+- Added several SSTV modes
+- Improved the image clipper function
+- Added the preview tool for selecting files
+- Fixed some bugs and improved some operations
+
+
+================
+New SSTV modes
+================
+
+The following SSTV modes have been added.
+
+	Name		Time(s)	Size			Method
+	---------------------------------------------------
+	SC2-120		122		320x256		RGB
+	SC2-60		62		320x256		RGB
+	PD50		50		320x256		Color discrimination
+	PD90		90		320x256		Color discrimination
+	PD120		126		640x496		Color discrimination
+	PD160		161		512x400		Color discrimination
+	PD180		187		640x496		Color discrimination
+	PD240		248		640x496		Color discrimination
+	PD290		289		800x616		Color discrimination
+	P3		203		640x496		RGB
+	P5		305		640x496		RGB
+	P7		406		640x496		RGB
+
+To use one of these modes, click the mode button in TX or RX window with the 
+right button of the mouse and select it from the pop-up menu.
+
+PD120 - PD290 and P3 - P5 have bigger image sizes than 320 x 256 (from now 
+on, I call them high-resolution modes).  The image view board of the MMSSTV 
+main window is designed to show a 320x256 image.  For this reason, MMSSTV 
+shrinks and displays the images (resized to 320x256) in those 
+high-resolution modes.  In other words, the sizes of the actual image and 
+that displayed in the RX window would not be the same.
+
+To view the high-resolution images in the original size, push the magnifier 
+button under the RX or History window, or at the Always Show RX viewer, 
+right click and select Resize to RX size in the pop up menu.
+
+To view the high-resolution TX images in the original size, push the 
+magnifier button under the TX window.
+
+If the sizes in the TX mode and in the original image are different, MMSSTV 
+does not resize the original image.  If you want to resize the image, right 
+click the TX window and select 'Stretch TX image by different size' in the 
+pop-up menu.  In this case, however, the image resolution sometimes 
+degrades, particularly when you get it bigger.  In addition, bear in mind 
+that different modes have different aspect ratios.
+
+Anyhow, it is recommended that you reload the image into the TX window if 
+you use images in different sizes.
+
+MMSSTV templates, therefore, have several sizes.  It is a good idea to use 
+the template whose size is the same as the image.  In default, MMSSTV tries 
+to get the template size to fit the image.  However, the layout of the 
+template components is not reserved.
+
+
+You can resize the template size by selecting Size entry in the pop-up menu, 
+which appears by right clicking the Template window.  If the size of the 
+template is different from that of the image, MMSSTV resizes the template 
+and gets it superimposed to the image.  It should be noted that the quality 
+of the template would get worse, but you can continue to use the templates 
+that you designed in different sizes.
+
+The image size in the Stocked pictures is predefined as 320x256.  If you 
+want to change it, right click the Stocked pictures area and select Size in 
+the pop-up menu.
+
+When you drag & drop an image from the TX window to the Stocked pictures 
+window, MMSSTV uses the TX image size.
+
+In PD290, P5, and P7 modes, the RAM, which is used for the automatic slant 
+adjustment, cannot store the whole image data.  The slant and phase 
+adjustment can be applied only to some portion of the data.  To avoid this 
+problem, select FILE for the RX buffer.
+
+
+========================
+New functions in the image clipper
+========================
+
+The following new functions have been added.
+
+- Copy and paste without changing the original image size
+- Rotate the image in 90 degrees
+- Adjust the image
+- Copy to the clipboard
+
+- Save an image to a file
+
+To use these functions, right click the image clipper window.  You will get 
+the pop-up menu for the functions.
+
+
+================================
+Preview in file selection
+================================
+
+In the dialog box for loading an image file, you can preview the image by 
+clicking the file name.
+The preview window is appeared at the top left corner for the first time, 
+but you can change the size and position as you like.
+
+73, Mako
+

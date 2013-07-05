@@ -1,0 +1,383 @@
+MMSSTVカスタムアイテム
+
+  本書ではMMSSTVのテンプレートに埋めこみ可能なカスタムアイテムについて解説します。
+
+========================
+○カスタムアイテムの概要
+========================
+　カスタムアイテムはMMSSTVのテンプレートに埋めこみ可能な任意のオブジェクトを実装するための機能です。カスタムアイテムにはMMSSTVの組み込みアイテムと同じように、受信履歴イメージの自動参照やマクロテキストの自動展開の機能を持たせることもできます。またストックテンプレートやファイルに保存することができ、既存の組み込みアイテムとまったく同じように扱う事ができます。
+
+　カスタムアイテムのすべての機能は、特定のインターフェースを持ったDLLファイルで提供されます。MMSSTVはユーザーが選択したDLLファイルを動的に読みこみそれを実行するための仕組みを持つだけです。アイテムの動作や外観、編集のためのユーザーインターフェースは、すべてそのDLL内に実装するコードによって決定されます。
+
+  カスタムアイテムの利点はMMSSTVの本体プログラムを変更することなく、テンプレートの機能を外部からいくらでも拡張できる点です。DLLファイルは単にいずれかのフォルダ（通常はMMSSTVフォルダ）に存在するだけで良く、OLEカスタムコントロール（ActiveX）のようなWindowsレジストリへの登録は必要ありません。
+
+　カスタムアイテムには以下の3種類が存在します。
+
+1.スタティックイメージ
+~~~~~~~~~~~~~~~~~~~~~~
+  テンプレート内にイメージを描画します。描画するイメージはそのオブジェクトが保持するプロパティに従い、MMSSTVの受信履歴イメージやマクロ変換テキストは参照しません。MMSSTVテンプレートのOLEオブジェクトと類似した動作になります。
+
+2.アクティブイメージ
+~~~~~~~~~~~~~~~~~~~~
+  テンプレート内にイメージを描画します。描画するイメージはそのオブジェクトが保持するプロパティおよび、MMSSTVの受信履歴イメージを参照して作成されます。MMSSTVテンプレートの画像アイテムを拡張した動作になります。
+
+3.アクティブテキスト
+~~~~~~~~~~~~~~~~~~~~
+  テンプレート内に文字イメージを描画します。描画するイメージはそのオブジェクトが保持するプロパティおよび、MMSSTVのマクロ変換テキストを参照して作成されます。MMSSTVテンプレートの文字アイテムを拡張した動作になります。
+
+
+  カスタムアイテムを作成する開発環境は、Windowsの32bitコードのDLLファイルが作成できるものならば何でも構いません。DLLファイルがエクスポートするファンクションに関しては、本書の「エクスポートファンクション」および「ファンクションの解説」の項を参照して下さい。
+
+
+==========
+○アイコン
+==========
+  カスタムアイテムのDLLファイルは、そのアイテムの特徴を現した32x32のアイコンのリソースを保持してください。
+　MMSSTVはフォルダのサムネイルのファイルの種類で「カスタムアイテム」が選択されたとき、DLLファイルから（１つ目の）アイコンをロードしてそれをサムネイルに表示します。
+
+　このアイコンは必須ではありませんが、フォルダのサムネイルからテンプレートにアイテムをドロップする際の助けになります。
+
+
+============================
+○エクスポートファンクション
+============================
+　カスタムアイテムのDLLファイルは、以下のファンクションをエクスポートします。
+
+extern "C" __declspec(dllexport) void mcmLanguage(long lang);
+extern "C" __declspec(dllexport) void mcmAboutDialog(HWND hWnd);
+extern "C" __declspec(dllexport) HANDLE mcmCreateObject(const BYTE *pStorage, DWORD Size);
+extern "C" __declspec(dllexport) void mcmDeleteObject(HANDLE hObj);
+extern "C" __declspec(dllexport) long mcmGetItemType(HANDLE hObj);
+extern "C" __declspec(dllexport) void mcmPos(HANDLE hObj, DWORD pos, DWORD size, DWORD tsize);
+extern "C" __declspec(dllexport) const BYTE* mcmCreateStorage(HANDLE hObj, LPDWORD pSize);
+extern "C" __declspec(dllexport) void mcmDeleteStorage(HANDLE hObj, const BYTE *pStorage);
+extern "C" __declspec(dllexport) long mcmEdit(HANDLE hObj, HWND hWnd);
+extern "C" __declspec(dllexport) long mcmFont(HANDLE hObj, HWND hWnd);
+extern "C" __declspec(dllexport) DWORD mcmGetOrgSize(HANDLE hObj);
+extern "C" __declspec(dllexport) LPCSTR mcmGetUserText(HANDLE hObj);
+extern "C" __declspec(dllexport) HBITMAP mcmUpdateText(HANDLE hObj, HBITMAP hbDest, LPCSTR pText);
+extern "C" __declspec(dllexport) HBITMAP mcmUpdateImage(HANDLE hObj, HBITMAP hbDest, HBITMAP hbSrc);
+extern "C" __declspec(dllexport) void mcmSetDraft(HANDLE hObj, DWORD sw);
+
+  エクスポートするファンクションは__cdecl呼び出し規約に従った、Cの修飾名でなければなりません。MMSSTVは例えばmcmAboutDialog()の場合、そのエントリポイントを"_mcmAboutDialog"または"mcmAboutDialog"の名前でDLL内から探します。
+
+　必須のファンクションは、mcmCreateObject()、mcmDeleteObject()および、mcmGetItemType()です。これ以外のファンクションはそのアイテムの動作に必要がなければエクスポートする必要はありません。
+
+
+======================
+○ファンクションの解説
+======================
+
+void mcmLanguage(long lang)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[パラメータ]	lang	: 0-日本語, 1-英語
+[解説]
+　現在のMMSSTVの動作言語モードが設定されます。アイテムのユーザーインターフェースで使用する言語は、ここで設定された言語とできるだけ一致させてください。または日本語をサポートしない場合、この値に関係なく常に英語を使用しても構いません。
+
+
+void mcmAboutDialog(HWND hWnd)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[パラメータ]	hWnd	: MMSSTVウインドウのハンドル
+[解説]
+  そのアイテムの名前やバージョン番号を表示するダイアログボックスを表示します。ダイアログボックスはhWndを親ウインドウとしてモーダル状態で実行します。
+　このファンクションは、MMSSTVのテンプレートで、「オブジェクト」->「プロパティ」が選択された時に呼び出されます。
+
+
+HANDLE mcmCreateObject(const BYTE *pStorage, DWORD Size)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[パラメータ]	pStorage: ストレージのポインタ
+		Size	: ストレージのサイズ
+[戻り値]
+　作成したオブジェクトのハンドル
+[解説]
+　アイテムのオブジェクトを１つ作成します。作成するオブジェクトはpStorageの内容で初期化されなければなりません。ストレージはオブジェクトを再構築するためにファイルにシリアライズされるデータです。詳細はmcmCreateStorage()を参照して下さい。
+　MMSSTVはこのファンクションを呼び出した直後、pStorageの領域を自動的に削除します。したがってそのポインタ自体をオブジェクト内に保持してはいけません。
+
+　MMSSTVがオブジェクトを新規に作成する場合、pStorageはNULLで呼び出されます。この場合、そのオブジェクトはデフォルトで初期化されなければなりません。
+
+  MMSSTVはhObjの内容について一切関知しません。従ってhObjにはどのような構造のデータが格納されていても構いません。ただしhObjはアイテムを識別するための０以外のユニークな値でなければなりません。
+　一般的な方法として例えば動的に構築した構造体またはクラスのポインタを返す次のようなコードを記述します。
+
+[Cの場合]
+	typedef struct {
+		:
+		:
+	}SMyObj;
+
+	SMyObj *pObj = (SMyObj *)malloc(sizeof(SMyObj));
+	if( pObj != NULL ){
+		InitMyObject(pObj);
+		CreateMyObject(pObj, pStorage, Size);
+	}
+	return (HANDLE)pObj;
+
+[C++の場合]
+	class CMyObj {
+		:
+		:
+	};
+
+	CMyObj *pObj = new CMyObj;
+	if( pObj != NULL ) pObj->Create(pStorage, Size);
+	return (HANDLE)pObj;
+
+
+  オブジェクトは可能な限りGDIリソースを節約してください。例えばデバイスコンテキストそのものや、ビットマップ、パレット、フォント、ブラシ、ペンなどのGDIリソースを描画時以外に大量に保持しないようにして下さい。これらを大量に保持すると、特にWin95/98/SE/ME系のOSの場合に問題を引き起こす可能性があります。
+
+
+void mcmDeleteObject(HANDLE hObj)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[パラメータ]	hObj	: オブジェクトのハンドル
+[解説]
+　mcmCreateObject()で作成したオブジェクトを削除します。hObjが保持するメモリやリソースはすべて解放されなければなりません。
+　一般的な方法として例えば動的に構築した構造体またはクラスを削除する次のようなコードを記述します。
+
+[Cの場合]
+	SMyObj *pObj = (SMyObj *)hObj;
+	DeleteMyObj(pObj);
+	free(pObj);
+
+[C++の場合]
+	CMyObj *pObj = (CMyObj *)hObj;
+	delete pObj;
+
+
+DWORD mcmGetItemType(HANDLE hObj)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[パラメータ]	hObj	: オブジェクトのハンドル
+[戻り値]	アイテム種別を表す32bitの値
+		00ao00uth
+		t : 種別
+			0-スタッティクイメージ
+			1-アクティブイメージ
+			2-アクティブテキスト
+		o : 表示
+			0-通常表示
+			1-オーバーレイ表示
+		u : 更新
+			0-サイズ変更時
+			1-サイズ変更時とアイテム移動時
+		a : 配置
+			0-左上詰め, 1-右上詰め, 2-左下詰め
+			3-右下詰め, 4-横中央, 8-縦中央
+[解説]
+　hObjのアイテム種別を返します。
+
+  MMSSTVはそのオブジェクトの種別をmcmCreateObjectを呼び出した直後、およびmcmEdit()を呼び出した直後に読み取ります。オブジェクトはその種別をmcmEdit()内のユーザーインターフェースで変更しても構いません。
+
+　オーバーレイ表示(o)に関しては本書の「テンプレートの背景色とオーバーレイ」の項を参照して下さい。
+
+  更新(u)は、テンプレート上でのアイテム枠のドラッグ操作により、アイテムの表示位置が変更された際に、mcmUpdateText()およびmcmUpdateImage()を呼び出すかどうかを指定します。
+
+　配置(a)はそのアイテムをテンプレート上でどのように配置するかを指定します。mcmUpdateImage()およびmcmUpdateText()で引き渡されるhbDestのサイズを変更しない場合、テンプレート上での配置は変化せずMMSSTVはこのフラグを無視します。しかしmcmUpdateImage()およびmcmUpdateText()内で新しいビットマップを作成しそのハンドルを返す場合、MMSSTVは表示サイズが変更されたアイテムをテンプレート上にどのように再配置するかをこのフラグにより決定します。
+
+
+const BYTE* mcmCreateStorage(HANDLE hObj, LPDWORD pSize)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[パラメータ]	hObj	: オブジェクトのハンドル
+		pSize	: ストレージのサイズを格納するポインタ
+[戻り値]	作成したストレージのポインタ
+[解説]
+　ストレージを１つ作成しそのポインタを返します。pSizeのアドレスに作成したストレージのバイト数を格納して下さい。
+
+　MMSSTVはテンプレートファイル(MTM, MTI)にそのアイテムを保存する際、このファンクションを呼び出して、返されたストレージを保存します。作成するストレージの構造は自由ですが、必ず2次記憶メディアに保存可能な形式でなければなりません。例えばストレージ内にポインタを格納してはなりません。
+
+　MMSSTVがテンプレートファイルをロードする際、mcmCreateObject()のpStorageで引き渡すストレージは、このファンクションで作成されたストーレージと同じ内容です。従って作成するストレージは、必ずオブジェクトが再構築できる形式でなければなりません。
+
+　ストレージの構造が変化した場合に予期しない動作に陥らないために、ストレージ内にそのバージョン番号を格納するのは良いアイデアです。
+
+　ストレージは動的な領域、または（オブジェクト内の）静的な領域のいずれに作成しても構いません。MMSSTVは返されたストレージをファイルに保存した直後、必ずmcmDeleteStorage()を呼び出して、動的に作成されたストレージを削除する機会を提供します。ストレージを動的に作成しなかった場合、mcmDeleteStorage()では何もする必要はありません。
+
+
+void mcmDeleteStorage(HANDLE hObj, const BYTE *pStorage)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[パラメータ]	hObj	: オブジェクトのハンドル
+		pStorage: ストレージのポインタ
+[解説]
+　mcmCreateStorage()で作成したストレージを削除します。
+
+
+DWORD mcmEdit(HANDLE hObj, HWND hWnd)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[パラメータ]	hObj	: オブジェクトのハンドル
+		hWnd	: MMSSTVウインドウのハンドル
+[戻り値]
+	TRUE	: オブジェクトが変更された時。
+	FALSE	: オブジェクトが変更されなかった時。
+[解説]
+　オブジェクトを編集するためのダイアログボックスを表示します。ダイアログボックスはhWndを親ウインドウとしてモーダル状態で実行します。
+
+　戻り値がTRUEの場合、MMSSTVはそのアイテムの外観を更新するために、mcmUpdateImage()またはmcmUpdateText()を呼び出します。
+
+　このファンクションは、MMSSTVのテンプレートで、そのアイテムがダブルクリックされるか、または「色の設定」ボタンが押された時に呼び出されます。
+
+
+DWORD mcmFont(HANDLE hObj, HWND hWnd)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[パラメータ]	hObj	: オブジェクトのハンドル
+		hWnd	: MMSSTVウインドウのハンドル
+[戻り値]
+	TRUE	: オブジェクトが変更された時。
+	FALSE	: オブジェクトが変更されなかった時。
+[解説]
+　オブジェクトのフォントを変更するためのダイアログボックスを表示します。ダイアログボックスはhWndを親ウインドウとしてモーダル状態で実行します。
+　このファンクションは、アクティブテキストの場合に、MMSSTVのテンプレートで、「フォント設定」ボタンが押された時に呼び出されます。
+
+　戻り値がTRUEの場合、MMSSTVはそのアイテムの外観を更新するために、mcmUpdateText()を呼び出します。
+
+　このファンクションは必須ではありませんが、オブジェクトがフォントを持つ場合はできるだけエクスポートするようにして下さい。これによりユーザーはフォントの変更をワンタッチで行うことができます。このファンクションがエクスポートされていない場合、MMSSTVは代わりにmcmEdit()を呼び出します。
+
+
+DWORD mcmGetOrgSize(HANDLE hObj)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[パラメータ]	hObj	: オブジェクトのハンドル
+[戻り値]
+	下位16ﾋﾞｯﾄ: 横幅
+	上位16ﾋﾞｯﾄ: 縦幅
+[解説]
+　アイテムの固有のサイズを返します。
+
+　アイテムが固有のサイズを持つ場合、テンプレートに表示されているサイズ（mcmUpdateImage()およびmcmUpdateText()のhbDestのサイズ）は必ずしもそれに一致しているとは限りません。
+　MMSSTVはテンプレートのポップアップメニューの「アスペクト比を保つ」および「オリジナルのサイズに戻す」の２つの機能を実装するために、このファンクションを呼び出します。
+
+　アイテムが固有のサイズを持たない場合、mcmUpdateImage()のhbSrcのサイズ、またはmcmUpdateText()のhbDestのサイズを保持しておき、それを返すようにして下さい。
+
+
+void mcmPos(HANDLE hObj, DWORD pos, DWORD size, DWORD tsize)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[パラメータ]	hObj	: オブジェクトのハンドル
+		pos	: テンプレート上の位置(X:下位16bit, Y:上位16bit)
+		size	: テンプレート上のサイズ(X:下位16bit, Y:上位16bit)
+		tsize	: テンプレートのサイズ(X:下位16bit, Y:上位16bit)
+[解説]
+  アイテムが表示されるテンプレート上の位置、サイズおよび現在のテンプレートのサイズの情報が設定されます。
+　このファンクションは必須ではありませんが、テンプレート上の位置によってビットマップの更新処理を変更する必要がある場合にエクスポートします。
+
+
+LPCSTR mcmGetUserText(HANDLE hObj)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[パラメータ]	hObj	: オブジェクトのハンドル
+[戻り値]	オブジェクトが保持するユーザ定義文字列のポインタ
+[解説]
+　ユーザー定義文字列を返します。このファンクションは、アクティブテキストの場合にのみ呼び出されます。
+
+  定義文字列とはユーザが設定したマクロを含む文字列です。通常この文字列はmcmEdit()で編集できるようにします。
+　MMSSTVはmcmUpdateText()を呼び出す際、必ず直前にmcmGetUserText()を呼び出してユーザー定義文字列を参照します。
+
+　MMSSTVは返された定義文字列をマクロ変換し、それをmcmUpdateText()のpTextに引き渡します。その際行うマルチバイト文字コード処理は、常にそのPCのコードページに依存する動作になります。例えば英語版Windows上ではマルチバイト文字コード処理は行われません。
+
+
+HBITMAP mcmUpdateText(HANDLE hObj, HBITMAP hbDest, LPCSTR pText)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[パラメータ]	hObj	: オブジェクトのハンドル
+		hbDest	: 描画用ビットマップのハンドル
+		pText	: 描画する文字列
+[戻り値]	新規に作成した描画用ビットマップのハンドル
+[解説]
+　pTextの内容で描画用のイメージを作成します。
+　このファンクションは、アクティブテキストの場合にのみ呼び出されます。
+
+  hbDestは必ず24bitフォーマットのDIBです。新規に描画用ビットマップを作成した場合、hbDestをDeleteObject()関数で削除し、作成したビットマップのハンドルを返して下さい。描画用ビットマップとしてhbDestを更新した場合、必ずNULLを返して下さい。新規に作成するビットマップはDDBでも構いませんが、できるだけDIBにして下さい。テンプレート内に表示されるイメージのサイズはhbDestのサイズまたは返されたビットマップのサイズになります。
+
+　MMSSTVはアイテムの外観を更新する必要があると判断した時、このファンクションを呼び出します。
+
+
+[例]
+  例えばpTextを単純にhbDestに展開するコードは次のようになります。
+
+	extern "C" __declspec(dllexport)
+	HBITMAP mcmUpdateText(HANDLE hObj, HBITMAP hbDest, LPCSTR pText)
+	{
+		DIBSECTION ds;
+		if( !GetObject(hbDest, sizeof(DIBSECTION), &ds) )
+			return NULL;
+
+		HDC hdcScreen = CreateDC("DISPLAY", NULL, NULL, NULL);
+		HDC hdcDest = CreateCompatibleDC(hdcScreen);
+		HBITMAP hbOld = SelectObject(hdcDest, hbDest);
+		TextOut(hdcDest, 0, 0, pText, strlen(pText));
+		SelectObject(hdcDest, hbOld);
+		DeleteDC(hdcDest);
+		DeleteDC(hdcScreen);
+		return NULL;
+	}
+
+
+HBITMAP mcmUpdateImage(HANDLE hObj, HBITMAP hbDest, HBITMAP hbSrc)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[パラメータ]	hObj	: オブジェクトのハンドル
+		hbDest	: 描画用ビットマップのハンドル
+		hbSrc	: 履歴画像ビットマップのハンドル
+[戻り値]	新規に作成した描画用ビットマップのハンドル
+[解説]
+　描画用イメージを作成します。
+　このファンクションは、スタティックイメージまたはアクティブイメージの場合に呼び出されます。スタティックイメージの場合hbSrcは必ずNULLで呼び出されます。
+
+　hbDestおよびhbSrcは必ず24bitフォーマットのDIBです。新規に描画用ビットマップを作成した場合、hbDestをDeleteObject()関数で削除し、作成したビットマップのハンドルを返して下さい。描画用ビットマップとしてhbDestを更新した場合、必ずNULLを返して下さい。新規に作成するビットマップはDDBでも構いませんが、できるだけDIBにして下さい。テンプレート内に表示されるイメージのサイズはhbDestのサイズまたは返されたビットマップのサイズになります。
+
+　MMSSTVはアイテムの外観を更新する必要があると判断した時、このファンクションを呼び出します。
+
+
+[例]
+  例えば現在のWindowsスクリーンをhbDestに伸縮展開するコードは次のようになります。
+
+	extern "C" __declspec(dllexport)
+	HBITMAP mcmUpdateImage(HANDLE hObj, HBITMAP hbDest, HBITMAP hbSrc)
+	{
+		DIBSECTION ds;
+		if( !GetObject(hbDest, sizeof(DIBSECTION), &ds) )
+			return NULL;
+
+		HDC hdcScreen = CreateDC("DISPLAY", NULL, NULL, NULL);
+		HDC hdcDest = CreateCompatibleDC(hdcScreen);
+		HBITMAP hbOld = SelectObject(hdcDest, hbDest);
+		SetStretchBltMode(hdcDest, HALFTONE);
+		StretchBlt(hdcDest, 0, 0,
+			ds.dsBm.bmWidth, ds.dsBm.bmHeight,
+			hdcScreen, 0, 0,
+			GetSystemMetrics(SM_CXSCREEN),
+			GetSystemMetrics(SM_CYSCREEN),
+			SRCCOPY);
+		SelectObject(hdcDest, hbOld);
+		DeleteDC(hdcDest);
+		DeleteDC(hdcScreen);
+		return NULL;
+	}
+
+
+void mcmSetDraft(HANDLE hObj, DWORD sw)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[パラメータ]	hObj	: オブジェクトのハンドル
+		sw	: 0-詳細描画, 1-ドラフト描画
+[解説]
+  mcmUpdateText()およびmcmUpdateImage()でビットマップを更新（または作成）する方法が設定されます。
+　「ドラフト描画」が指定された場合、mcmUpdateText()およびmcmUpdateImage()で更新するビットマップは、その品質よりも速度が要求されます。「ドラフト描画」が設定されるのはストックテンプレート上でアイテムが描画される際に、MMSSTVで「高速描画」のチェックが付けられている場合だけです。
+　MMSSTVはオブジェクトを作成後このフラグを初期化しません。従ってオブジェクトの初期値は必ず「詳細描画」の状態にして下さい。
+
+　ビットマップの更新に時間を要しない場合、ドラフト描画をサポートする必要はありません。その場合、このフラグを無視するか、またはこのファンクションそのものをエクスポートする必要はありません。
+
+
+====================================
+○テンプレートの背景色とオーバーレイ
+====================================
+  カスタムアイテムはMMSSTVのテンプレートに一旦描画されます。その後テンプレートと送信素材画像が重畳されて送信画像が作成されます。
+　したがってアイテムのオーバーレイの状態に関係なく、常にテンプレートは送信素材画像に対してオーバーレイです。その時の透過色はテンプレートの背景色としてユーザが設定します。つまりアイテムがオーバーレイでない場合でも、アイテム内にテンプレートの背景色と同じ色が存在する場合、その色はすべて透過になります。
+　ただし複数のアイテムがテンプレート上に重なった状態では、アイテムのオーバーレイを指定しないと、アイテム間で透過されません。
+
+　テンプレートの背景色は、mcmUpdateImage()およびmcmUpdateText()のhbDestの初期色で得ることができます。この色は動作時のビデオモードでの純色に調整されています。従ってそのアイテムをオーバーレイ描画する場合、そのアイテムの透過色をテンプレートの背景色に一致させるのが最も好ましい方法です。
+
+　一方、アイテムをオーバーレイで描画しない場合、アイテム内のすべての色はテンプレートの背景色と同じ色にしてはなりません。またオーバーレイで描画する場合でも、透過色以外の部分はテンプレートの背景色と同じ色にしてはなりません。
+  例えばmcmUpdateImageで、hbSrcからhbDestを作成する場合、hbDestに格納する色をテンプレートの背景色と一致させないようにします。この最も簡単な方法は一致する色の値を１値だけ変化させます。この方法ではビデオモードがフルカラーの場合、アイテム内のすべての色が送信画像に展開されます。ただしビデオモードが16bitカラーの場合、色の値を１値だけ変化させても結果として同じ色になる可能性が高いので、ユーザーがテンプレートの背景色を変化させなければならない場合があります。
+
+
+========================
+○カスタムアイテムの配布
+========================
+  あなたが作成したカスタムアイテムは、あなたの裁量で自由に公開配布して下さい。
+
+　カスタムアイテムのDLLファイルはMMSSTV以外から利用されることはありません。したがってDLLファイルは通常はMMSSTVフォルダ内にインストールします。インストールプログラムで配布する場合、インストール先のフォルダが選択できるようになっているのが好ましいと思います。
+
+　配布するカスタムアイテムが大量の他のファイルを保持、または作成する場合、専用のフォルダにそれらをインストールし、そのDLLファイルのショートカット（.LNK）をMMSSTVフォルダ内に１つだけ作成するのは良い考えです。
+
+
+73, Mako

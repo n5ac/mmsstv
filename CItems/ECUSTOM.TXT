@@ -1,0 +1,371 @@
+MMSSTV Custom Item
+	March 24, 2002
+	Written by JE3HHT Makoto Mori
+	Translated into English by JA7UDE Nob Oba
+
+This document explains how to make the MMSSTV custom item.
+
+
+========================
+Overview of the custom item
+========================
+
+ The custom item is an implementation scheme of an object that can be embedded in the MMSSTV template.  The custom item can have various functions, such as the automatic reference to the receive history images and the automatic conversion of macro texts.  The custom item is stored in the stock template or file so that it can be treated as a conventional embedded item.
+
+ All the functions provided in the custom item are offered as a DLL file, which has the specific interface to MMSSTV.  MMSSTV merely loads the DLL on-the-fly and runs it.  The operation, the appearance, and the user interface of the custom item are all defined in the DLL.
+
+ The biggest advantage of the custom item is high expandability.  Using the custom item, the user can add any kind of functions to the MMSSTV template without modifying the MMSSTV program.  The DLL file can be stored in any folder (normally in the MMSSTV directory), and does not need to be registered in Windows registry.
+
+ The custom items are categorized into the following three types:
+
+1. Static image
+ The static image is displayed as an image in the template.  The image is controlled by its own property; it does not refer to the MMSSTV receive history or the macro conversion text.  It is similar to the OLE object of the MMSSTV template.
+
+2. Active image
+ The active image is displayed as an image in the template.  The image is controlled by its own property and the MMSSTV receive history.  It offers an extended function of the image item in the MMSSTV template.
+
+3. Active text
+ The active text is shown as a text image in the template.  The text image is controlled by its own property and the MMSSTV macro conversion.  It offers an extended function of the text item in the MMSSTV template.
+
+ To make a custom item, any development suite that generates Windows 32-bit DLL can be used.  For further information, refer to the sections of Export Function and Function Details in this document.
+
+
+==========
+Icon
+==========
+
+The custom item DLL should include a 32x32 icon resource, which represents the feature of the item.  MMSSTV loads and displays the (first) icon in the thumbnail window when the custom item is selected as the file type in the folder thumbnail.
+
+The icon is not a must, but it makes the drag&drop operation easier for the user.
+
+
+============================
+Export Function
+============================
+
+The custom item DLL exports the following functions:
+
+extern "C" __declspec(dllexport) void mcmLanguage(long lang);
+extern "C" __declspec(dllexport) void mcmAboutDialog(HWND hWnd);
+extern "C" __declspec(dllexport) HANDLE mcmCreateObject(const BYTE *pStorage, DWORD Size);
+extern "C" __declspec(dllexport) void mcmDeleteObject(HANDLE hObj);
+extern "C" __declspec(dllexport) long mcmGetItemType(HANDLE hObj);
+extern "C" __declspec(dllexport) void mcmPos(HANDLE hObj, DWORD pos, DWORD size, DWORD tsize);
+extern "C" __declspec(dllexport) const BYTE* mcmCreateStorage(HANDLE hObj, LPDWORD pSize);
+extern "C" __declspec(dllexport) void mcmDeleteStorage(HANDLE hObj, const BYTE *pStorage);
+extern "C" __declspec(dllexport) long mcmEdit(HANDLE hObj, HWND hWnd);
+extern "C" __declspec(dllexport) long mcmFont(HANDLE hObj, HWND hWnd);
+extern "C" __declspec(dllexport) DWORD mcmGetOrgSize(HANDLE hObj);
+extern "C" __declspec(dllexport) LPCSTR mcmGetUserText(HANDLE hObj);
+extern "C" __declspec(dllexport) HBITMAP mcmUpdateText(HANDLE hObj, HBITMAP hbDest, LPCSTR pText);
+extern "C" __declspec(dllexport) HBITMAP mcmUpdateImage(HANDLE hObj, HBITMAP hbDest, HBITMAP hbSrc);
+extern "C" __declspec(dllexport) void mcmSetDraft(HANDLE hObj, DWORD sw);
+
+All the export functions must comply with __cdecl C calling rule.  For example, MMSSTV looks for entry point "_mcmAboutDiaglog" or "mcmAboutDialog" in the DLL when it calls mcmAboutDialog().
+
+The DLL must have at least three functions exported: mcmCreateObject(), mcmDeleteObject(), and mcmGetItemType().  All the other functions are optional and do not have to be exported if not needed.
+
+
+======================
+Function Details
+======================
+
+void mcmLanguage(long lang)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Parameter]	lang	: 0 - Japanese, 1 - English
+[Details]
+ It specifies the language mode of MMSSTV.  The language used in the user interface of the custom item should conform to the language specified here.  If the item does not support Japanese, simply use the English mode.
+
+void mcmAboutDialog(HWND hWnd)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Parameter]	hWnd	: MMSSTV window handle
+[Details]
+ It displays a dialog box including the item name and the version number.  The dialog box has hWnd as its parent window handle and appears as a modal window.
+
+ This function is called when the user selects Object -> Property in the MMSSTV template.
+
+HANDLE mcmCreateObject(const BYTE *pStorage, DWORD Size)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Parameters]	pStorage: pointer to the storage
+		Size	: storage size
+[Return value]
+ The handle of the created object
+
+[Details]
+ This function creates an item object.  The object must be initialized with the content of pStorage.  The Storage contains the data that is serialized into the file for reconstructing the object.  For more information, refer to mcmCreateStorage().
+
+ MMSSTV automatically deletes the pStorage area after calling this function.  Therefore, the pointer itself must not be stored in the pStorage area.
+ When MMSSTV newly creates the object, it calls the function with pStorage = NULL.  In that case, the object must be initialized in default.
+ MMSSTV does not care about the content of hObj, and therefore hObj can have any kinds of data structure.  However, hObj must be a unique number other than 0 to identify the item.
+
+ Here is a typical example that returns the class pointer to the dynamically created structure.
+
+[Example in C]
+	typedef struct {
+		:
+		:
+	}SMyObj;
+
+	SMyObj *pObj = (SMyObj *)malloc(sizeof(SMyObj));
+	if( pObj != NULL ){
+		InitMyObject(pObj);
+		CreateMyObject(pObj, pStorage, Size);
+	}
+	return (HANDLE)pObj;
+
+[Example in C++]
+	class CMyObj {
+		:
+		:
+	};
+
+	CMyObj *pObj = new CMyObj;
+	if( pObj != NULL ) pObj->Create(pStorage, Size);
+	return (HANDLE)pObj;
+
+ The object should use as few GDI resources as possible.  More specifically, the object should not have the device context itself, bitmap, palette, font, brush, or pen, except that they are needed in drawing operations.  If the object keeps many GDI resources, it would cause resource shortage in Windows 95/98/SE/ME operating systems.
+
+void mcmDeleteObject(HANDLE hObj)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Parameter]	hObj	: Object handle
+[Details]
+ This function deletes the object that have been created by mcmCreateObject().  All the memory and resources sustained by hObj must be released.
+
+ Let me give you a typical code that deletes the dynamically created structure.
+
+[Example in C]
+	SMyObj *pObj = (SMyObj *)hObj;
+	DeleteMyObj(pObj);
+	free(pObj);
+
+[Example in C++]
+	CMyObj *pObj = (CMyObj *)hObj;
+	delete pObj;
+
+
+DWORD mcmGetItemType(HANDLE hObj)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Parameter]	hObj	: Object handle
+[Return value]	32-bit value that identifies the item type
+		00ao00uth
+		t : type
+
+			0 - Static image
+			1 - Active image
+			2 - Active text
+		o : display
+			0 - normal display
+			1 - overlay display
+		u : update
+			0 - updated on resize
+			1 - updated on resize and move
+		a : alignment
+			0 - upper_left, 1 - upper_right, 2 - lower_left
+			3 - lower_right, 4 - horizontally_center, 8 - vertically_center
+
+[Details]
+ This function returns the type of hObj.
+ MMSSTV reads the object type immediately after calling mcmCreateObject() or mcmEdit().  The object can change its type in the user interface in mcmEdit().
+ For details of the overlay display, refer to the section of Background color of the template and overlay.
+ The update (u) specifies whether mcmUpdateText() and mcmUpdateImage() are called or not when the item is moved in the template by dragging.
+ The alignment (a) specifies how the item is placed in the template.  In case the size hbDest, which is passed through mcmUpdateImage() and mcmUpdateText(), is not changed, MMSSTV ignores this flag.  If a new bitmap is created in mcmUpdateImage() and mcmUdateText(), and its handle is returned, MMSSTV uses this flag to determine how to place the new item in the template.
+
+
+const BYTE* mcmCreateStorage(HANDLE hObj, LPDWORD pSize)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Parameters]	hObj	: object handle
+		pSize	: pointer to the storage size
+[Return value]	pointer to the created storage
+[Details]
+ This function creates a storage and returns a pointer to it.  Put the storage size in byte to pSize.
+
+
+ When MMSSTV stores the item in the template file (MTM/MTI), it calls this function and saves the storage returned.  Any type of storage can be used here, but it must take a form that can be stored in the secondary storage.  For example, the pointer must not be included in the storage itself.
+ When MMSSTV load the templage file, it passes the same storage specified by pStorage in mcmCreateObject().  For this reason, the storage to be created must have the reconstructable form.
+ It is a good idea to have a version number available in the storage to avoid unexpected behavior in case the storage structure changes.
+ The storage can be allocated in dynamic or (in-object) static area.  MMSSTV always calls mcmDeleteStorage() to offer a chance of deleting the dynamically allocated storage after it saves the storage to a file.  If you do not dynamically allocate the storage, mcmDeleteStorage() need to do nothing.
+
+
+void mcmDeleteStorage(HANDLE hObj, const BYTE *pStorage)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Parameters]	hObj	: object handle
+		pStorage: pointer to storage
+[Details]
+ This function deletes the storage created by mcmCreateStorage().
+
+
+DWORD mcmEdit(HANDLE hObj, HWND hWnd)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Parameters]	hObj	: Object handle 
+		hWnd	: MMSSTV window handle
+[Return value]
+	TRUE	: Object changed
+	FALSE	: Object not changed
+[Details]
+ The function displays a dialog box to edit the object.  The dialog box has hWnd as its parent window handle and appears as a modal window.
+
+ If it returns TRUE, MMSSTV calls mcmUpdateImage() or mcmUpdateText() to update the item's appearance.
+ This function is called when the item is double clicked in the MMSSTV template or when the Set color button is pressed.
+
+
+DWORD mcmFont(HANDLE hObj, HWND hWnd)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Parameters]	hObj	: object handle
+		hWnd	: MMSSTV window handle
+[Return value]
+	TRUE	: Object changed
+	FALSE	: Object not changed
+[Details]
+ This function displays a dialog box to change the font.  The dialog box has hWnd as its parent window handle and appears as a modal window.
+
+ This function is called when the Set font button is pressed in the MMSSTV template.
+ If the return value is TRUE, MMSSTV calls mcmUpdateText() to update the item appearance.
+ This is not a mandatory function, but it should be exported if the item has a font, so that the font change is a snap.  If the function is not exported, MMSSTV calls mcmEdit() instead.
+
+
+DWORD mcmGetOrgSize(HANDLE hObj)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Parameter]	hObj	: object handle
+[Return value]
+	Lower 16 bits: item width
+	Upper 16 bits: item height
+[Details]
+ This function returns the item size in width and height.
+ If the item has its own size property, it may not always concur to the size displayed in the template (hbDest size in mcmUpdateImage(), mcmUpdateText()).  MMSSTV call this function to perform the "Keep aspect ratio" and "Return to the original size" functions in the pop-up menu.
+
+ If the item has no own size property, save hbSrc of mcmUpdateImage() or hbDest of mcmUpdateText() and return it in response.
+
+
+void mcmPos(HANDLE hObj, DWORD pos, DWORD size, DWORD tsize)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Parameters]	hObj	: object handle
+		pos	: position in the template (X: lower 16 bits, Y: upper 16 bits)
+		size	: size in the template (X: lower 16 bits, Y: upper 16 bits)
+		tsize	: template size (X: lower 16 bits, Y: upper 16 bits)
+[Deltails]
+ This function specifies the position and size of the item, and also the template size.  This is not a mandatory function, but it should be exported if the bitmap is updated in accordance with the position and size.
+
+
+LPCSTR mcmGetUserText(HANDLE hObj)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Parameter]	hObj	: object handle
+[Return value]	pointer to the user-defined string in the object
+[Details]
+ This function returns the user-defined character string.  It is called for the active text.
+
+ The user-defined string is the character string that contains user-specified macro.  The string should be edited by mcmEdit().  MMSSTV always calls mcmGetUserText() just before calling mcmUpdateText() in order to refer to the user-define string.
+ MMSSTV does the macro conversion on the returned string and passes it to pText of mcmUpdateText().  The multi-byte code conversion depends on the code page of the PC.  On English Windows operating system, for instance, the multi-byte conversion does not take place.
+
+
+HBITMAP mcmUpdateText(HANDLE hObj, HBITMAP hbDest, LPCSTR pText)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Parameters]	hObj	: object handle
+		hbDest	: handle of drawing bitmap
+		pText	: character string to be drawn
+[Return value]	handle of newly created drawing bitmap
+[Details]
+ This function creates a drawing image based on the content of pText.  This function is called only in active text handling.
+
+
+ hbDest is always 24-bit format DIB.  If you create a new drawing bitmap, you have to delete hbDest by using DeleteObject() and return the bitmap handle.  If you update hbDest as the drawing bitmap, you have to return NULL.  The bitmap can be DDB, but it is strongly recommended to use DIB.  The image size shown in the template is the bitmap size or hbDest.
+
+ MMSSTV call this function if it detects the need in updating the item appearance.
+
+[Example]
+ The following example code simply unfolds pText to hbDest.
+
+
+	extern "C" __declspec(dllexport)
+	HBITMAP mcmUpdateText(HANDLE hObj, HBITMAP hbDest, LPCSTR pText)
+	{
+		DIBSECTION ds;
+		if( !GetObject(hbDest, sizeof(DIBSECTION), &ds) )
+			return NULL;
+
+		HDC hdcScreen = CreateDC("DISPLAY", NULL, NULL, NULL);
+		HDC hdcDest = CreateCompatibleDC(hdcScreen);
+		HBITMAP hbOld = SelectObject(hdcDest, hbDest);
+		TextOut(hdcDest, 0, 0, pText, strlen(pText));
+		SelectObject(hdcDest, hbOld);
+		DeleteDC(hdcDest);
+		DeleteDC(hdcScreen);
+		return NULL;
+	}
+
+
+HBITMAP mcmUpdateImage(HANDLE hObj, HBITMAP hbDest, HBITMAP hbSrc)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Parameters]	hObj	: object handle
+		hbDest	: handle of drawing picture
+		hbSrc	: handle of history bitmap
+[Retruen value]	handle of newly created drawing bitmap
+[Details]
+ This function creates a drawing bitmap.  This function is called for static and active images.  For the static image, hbSrc must be NULL.
+ hbDest and hbSrc are always 24-bit DIB.  When you create a new drawing bitmap, delete hbDest using DeleteObject() and return the handle of the created drawing bitmap.  If hbDest was updated as a drawing bitmap, return NULL.  The bitmap can be DDB, but it is strongly recommended to use DIB.  The image size in the templage becomes the size of hbDest or the returned bitmap size.
+
+ MMSSTV calls this function if it detects the need in updating the item appearance.
+
+
+[Example]
+ The following example code stretches and maps the current Windows screen to hbDest.
+
+
+	extern "C" __declspec(dllexport)
+	HBITMAP mcmUpdateImage(HANDLE hObj, HBITMAP hbDest, HBITMAP hbSrc)
+	{
+		DIBSECTION ds;
+		if( !GetObject(hbDest, sizeof(DIBSECTION), &ds) )
+			return NULL;
+
+		HDC hdcScreen = CreateDC("DISPLAY", NULL, NULL, NULL);
+		HDC hdcDest = CreateCompatibleDC(hdcScreen);
+		HBITMAP hbOld = SelectObject(hdcDest, hbDest);
+		SetStretchBltMode(hdcDest, HALFTONE);
+		StretchBlt(hdcDest, 0, 0,
+			ds.dsBm.bmWidth, ds.dsBm.bmHeight,
+			hdcScreen, 0, 0,
+			GetSystemMetrics(SM_CXSCREEN),
+			GetSystemMetrics(SM_CYSCREEN),
+			SRCCOPY);
+		SelectObject(hdcDest, hbOld);
+		DeleteDC(hdcDest);
+		DeleteDC(hdcScreen);
+		return NULL;
+	}
+
+
+void mcmSetDraft(HANDLE hObj, DWORD sw)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Prameters]	hObj	: object handle
+		sw	: 0 ? full drawing, 1 ? draft drawing
+[Details]
+ This function specifies the update mode of the bitmap in mcmUpdateText() and mcmUpdateImage().  The draft drawing mode is used if Draft is checked in the main MMSSTV window.  The draft drawing mode gives priority to the speed over the quality.  
+
+ MMSSTV does not initialize this flag after creating the object, and therefore the initial mode must be set to the full drawing mode.
+ You do not have to support the draft drawing mode if it does not take plenty of time to update the bitmap.  Just ignore this flag or do not export this function.
+
+
+====================================
+Background color of the template and overlay
+====================================
+
+ The custom item is first drawn in the template, and then the template is superimposed to the TX material image in order to make up the SSTV TX picture.  For this reason, the template is overlaid on the TX material image regardless of the overlay status of the item.  The background color of the template is supposed to be the transparent color.  Even if the item is not overlaid on the template, the color in the item, which is the same as the background color, could be transparent in that case.
+
+ The background of the template can be obtained by the initial color in mcmUpdateImage() or mcmUpdateText().  The color is adjusted to the pure color in accordance with the video mode, and therefore it is desirable that the transparent color of the item be set to the background color of the template.
+
+ If you do not overlay the item in the template, you must not use the template background color for the any part of the item.  If you overlay the item in the template, you must not use the template background color for the any part except the transparent pixels.
+ For example, if you make hbDest from hbSrc by using mcmUpdateImage(), you do not use the template background color for hbDest.  The simplest way to do this is to change the same color by 1.  This is effective for the full color video because the change affects the whole TX image.  The 16-bit color video, however, the change by 1 would not affect the result, and the user may have to change the template background color.
+
+
+========================
+Distribution of the custom item
+========================
+
+ You can freely distribute your custom items as you like.
+
+ The DLL file of the custom item will be used only by MMSSTV.  Thus, the DLL file normally is installed in the MMSSTV directory.  It is preferable that the user can select the destination folder for the installation.
+
+ If the custom item contains or generates many file, it is good idea to get them installed in another folder and make the shortcut (foo.lnk) in the MMSSTV directory.
+
+73, Mako
+

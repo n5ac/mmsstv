@@ -1,0 +1,219 @@
+***** The 2010 JASTA SSTV Activity Contest Rules*****
+
+	http://homepage3.nifty.com/jasta/english/index.html
+
+1.Contest periods
+~~~~~~~~~~~~~~~~~~
+ From August 1st 2010 (00:00 UTC) to August 31 (24:00 UTC)
+
+2.Bands
+~~~~~~~~
+ 3.5MHz and all upper bands.Use Only frequencies which are authorized by each individual station license.
+
+3.Categories of Entry
+~~~~~~~~~~~~~~~~~~~~~
+a) "J" Category (Japanese only): Japanese domestic stations
+
+b) "S" Category(DX station): All stations operating outside of Japan. If a Japanese station operates outside Japan, this will be considered a DX contact.
+
+4.QSO Point
+~~~~~~~~~~~~~
+ Exchange the usual RSV plus a progressive QSO number starting with 001 which should be displayed in the picture exchange. Regardless of  bands used, a station may only be worked  once each UTC day .
+ If possible, during the exchange,  include one's own face picture or some kind of illustration. QSO points authorized  by bands.
+
+	3.5-28MHz ... 1 point
+	50-430MHz ... 2 points
+	1200MHz & upper ... 3 points
+
+5.Multipliers
+~~~~~~~~~~~~
+ Work all  Japanese callsign districts(JA1-JA0 total 10) + DXCC Countries worked. Use DXCC List.  Do not count Japan as a DXCC country + Number of  days on the air.  (10 days at the maximum even if a station  operates  more than 10 days)
+
+note:Prefix 7K-7N's are all JA1 area
+
+6.Scoring
+~~~~~~~~~
+ The final score is computed by multiplying the sum of the QSO points by the sum of multipliers as described in Paragraph 5.
+
+7.Contest awards
+~~~~~~~~~~~~~~~~~
+1) A shield award will be sent to the 1st, the 2nd and the 3rd Score of each sections. But when the number of stations are less than 10, awards will be sent to the 1st place winner only.
+
+2) A special activity award will be sent to some of the stations who work over 10 days by lot.
+      (A JASTA T-shirts to 20 stations)
+
+3) New face certificate will be sent to the 1st of new comers. so please annotate your summary sheets "new Comer" on summary sheets.
+
+4) YL certificate will be sent to the 1st place YL stations.
+
+8.Logs
+~~~~~~~
+ Summary sheets and Log sheets should be arranged and mailed to the Contest manager. Email contest Summary sheet and logs to: JASTA Contest Secretary ja3wzt@mue.biglobe.ne.jp  The log should be in a text file format.  Email (text format)  summary.  E-Mail logs are acceptable now. Both Summary and logs should be forwarded to ja3wzt@mue.biglobe.ne.jp  Assure you station callsign is in the e-mail subject line.
+
+* DX stations, "CQ WW" contest format is acceptable. Please enclose SASE and 1 IRC for reply. The log in a text file by Email is also acceptable now.
+
+9.Deadline for log entries
+~~~~~~~~~~~~~~~~~~~~~~~~~
+ Log entries with a stamp of a local POST office dated not later than September 30, 2010.(UTC) In case of Email, it must be received by the same above deadline.(UTC) 
+
+10.Regulations
+~~~~~~~~~~~~~~
+1) All Amateur Radio stations who has a license to transmit SSTV signal.
+
+2) Output power: Up to maximum power officially authorized by the operators class license .
+
+3) Both B/W and Color Picture QSO are accepted.
+
+4) A contest QSO should be one station to one station QSO. Round table style QSO’s between multiple stations will not be counted.
+
+5) Cross band QSO will not be counted as a contest QSO.
+
+6) All the QSO; JA to JA station, JA to DX station, DX to DX station will be counted and  accepted as contest QSOs.
+
+11.JASTA Contest Results
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+ The contest results will be sent to all stations who include a SASE. Aditionally announcement will be made  on JASTA homepage and Japanese "CQ ham radio" magazine .
+
+12.The Contest Manager and Mailing Address
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+JASTA Contest Secretariat   Email:ja3wzt@mue.biglobe.ne.jp
+c/o YOSHIKAZU TANABE JA3WZT/1 
+905-8,SHIMOTANIGANUKI,IRUMA,SAITAMA,358 JAPAN
+
+%%%Japanese ==========================================
+　ＪＡＳＴＡ主催ＳＳＴＶアクティビティコンテスト (2010)
+
+	http://homepage3.nifty.com/jasta/
+
+期間
+~~~~~
+　国際標準時間の８月１日（日）０時　～　８月３１日（火）２４時
+　（日本時間 ８月１日 ９時 ～ ９月１日 ９時まで）
+
+参加資格
+~~~~~~~~~
+　アマチュア無線の資格を持ち、ＳＳＴＶの免許を受けている局。
+
+運用周波数
+~~~~~~~~~~~~
+　３．５ＭＨｚ帯以上で自局に免許された周波数帯
+　（電波法および郵政省令に定められた周波数帯で運用）。
+
+空中線電力
+~~~~~~~~~~~~
+　免許された電力の範囲内
+
+コンテストナンバー
+~~~~~~~~~~~~~~~~~~
+　ＲＳＶ＋００１から始まる連番。連番の桁が足りなくなったら桁を増やしてください。
+
+　例えば信号レポートが５９５で、期間中２０局目のＱＳＯであれば、コンテストナンバーは「５９５０２０」。
+
+ポイント
+~~~~~~~
+　可能なかぎり、自分の顔が写っている画像（手描きのイラストも可）に自局のコールサインとコンテストナンバーを入れて送信する。完全なコンテストナンバー交換をもって下記に示すポイント点とする。画像の白黒、カラーは問わない。コンテストでのＱＳＯは、相手局と１対１とし、ラウンドＱＳＯは認めない。海外局との交信もポイントとして認める。なお、同一局との交信は周波数にかかわらず一日一回のみ有効。
+
+　注意：同一日は、国際標準時間を基準として判定すること。時差の異なる海外局とのＱＳＯにおいて、日本時間で日付が変っていても国際標準時間で同一であればポイントとして認めない。
+
+　（１）３．５～２８ＭＨｚ帯 ：１点　（７ＭＨｚ帯は７．１ＭＨｚ以上の周波数での交信を推奨します）
+　（２）５０～４３０ＭＨｚ帯 ：２点
+　（３）１２００ＭＨｚ帯以上 ：３点
+
+マルチ
+~~~~~~
+　バンドに関係なく以下の項目をマルチとして計上できる。
+
+　（１）ＪＡのエリア（１０エリア）
+　（２）ＪＡを除くＤＸＣＣエンティティ
+　　　　・ＪＤはＤＸＣＣのエンティティとしカウントする
+　　　　・ ＤＸＣＣエンティティ内のエリアはマルチとしてカウント出来ません。
+　（３）運用日数
+　　　　１日の運用は１マルチとし最大１０マルチ（１０日以上の運用をしても１０とする）。
+
+総得点
+~~~~~~~
+　 （ポイントの和）×（マルチの和）。
+
+　例えば、１４ＭＨｚ帯で１５局、５０ＭＨｚ帯で８局、４３０ＭＨｚ帯で７局、１２００ＭＨｚ帯で５局のコンテストナンバ交換した場合、交信ポイントは
+　１５×１＋（８＋７）×２＋５×３＝６０となる。
+
+　さらにマルチがＪＡの１０エリア、ＤＸＣＣ　５エンティティ、運用日数１２日の場合、総得点は
+　６０×（１０＋５＋１０）＝１５００となる。
+
+エントリー部門
+~~~~~~~~~~~~~~
+　国内部門（Ｊ部門）：日本国内からのエントリー局
+　海外部門（Ｓ部門）：海外からのエントリー局（日本の局が海外カントリーから運用した場合この部門となる。）
+
+　今回のコンテストで初めてサマリーを提出し初参加か否かの区別およびＯＭ、ＹＬ（ＸＹＬ）の区別も記入願います。
+
+賞
+~~~
+　各部門、上位３位までに楯を送る。各部門参加局が１０局に満たない場合は、1位にのみ楯を送る。
+　またニューフェース賞を、今回のコンテストが初参加の申告があった局の中から、得点が１位の局に送る。
+　さらにＹＬ（ＸＹＬ）のエントリがあった場合、その中で得点が１位の局にベストYL(XYL)賞を送る。
+　運用日数が１０日以上の局にはアクティビティ賞として、抽選で２０名にＪＡＳＴＡ特性の
+
+　Ｔ－シャツ（提出するサマリシートにJASTA特性T-シャツのサイズを記入願います。なお記入のない場合はLサイズとさせていただきます）を送る。
+　なお、同一オペレータが、ＤＸペディション等、国外で運用した場合は、国内コールでの運用日数と国外コールでの運用日数を合算できる。たとえば、国内運用７日、ＤＸペディ運用４日とすれば、合計１１日となり、アクテイブ賞対象となる。
+
+
+ログの提出
+~~~~~~~~~~~
+　ログは、以下の２方法のどちらかで提出してください。両方での提出は、混乱の原因になりますので絶対にしないようにお願いします。
+
+　（１）郵送の場合
+　ＪＡＲＬのコンテストサマリーまたは、ＪＡＳＴＡが定めた書式のフォーマットで記入したサマリー、およびマルチに計上する　交信のログを下記の提出先にＳＡＳＥ（定形の封筒に８０円切手をはり、宛先を明記した封筒を同封する）にて郵送する
+　（結果の送付を必要としない場合は、ＳＡＳＥにする必要はない。）
+
+　（２）ｅ－ｍａｉｌで送付する場合
+　ＪＡＳＡＴが定めた書式のフォーマットで記入したサマリーおよびマルチに計上する交信のログを、下記のアドレスにｅ－ｍａｉｌで送付する。
+　ｅ－ｍａｉｌで受付けた場合は、メールを受領した事を示す返信を事務局より送信します。２週間たっても受領確認のメールが来ない場合は再送信してください。
+
+　コンテストルール違反、サマリシート記入不備の場合は書類不備をして扱います。
+　サマリーシートの参加部門欄に、エントリー部門（Ｊ、またはＳ）、今回のコンテストが初参加か否かの区分、およびＯＭ，ＹＬ（ＸＹＬ）の区別を明記のこと。
+
+　ＪＡＲＬのコンテストサマリーに記入する場合、ＪＡのエリア、ＤＸＣＣカントリーのマルチは合計して、バンドの欄に「エリア＋ＤＸＣＣ］と追記しマルチプライヤーの欄に記入して下さい。また運用日数のマルチについては、バンドの欄に「運用日数」と追記し、マルチプライヤーの欄にコンテストで運用した日数を記入して下さい。
+
+　ＪＡＳＴＡが定める書式については、ＪＡＳＴＡ事務局のホームページ（http://homepage3.nifty.com/jasta/）で準備します。ダウンロードしてそれに記入してください。
+
+ログの締切
+~~~~~~~~~~~
+　２０１０年９月３０日消印またはタイムスタンプ有効。これ以降は無効。
+
+ログの提出先
+~~~~~~~~~~~~~~
+　（１）郵送の場合
+　　　　〒３５８－００４１　埼玉県入間市下谷ケ貫９０５－８
+　　　　田辺　義和方　日本アマチュアＳＳＴＶ協会　コンテスト事務局
+
+　（２）ｅ－ｍａｉｌで送付する場合
+　　　　ja3wzt@mue.biglobe.ne.jp
+
+注意点
+~~~~~~~
+　・相手局を呼び出すときは、先に音声で呼び出し、応答を確認してから画像を送信するようにしてください。
+　　いきなり画像で呼び出すようなことは避けてください。
+
+　・ＣＱを送信する際は十分にワッチし、音声で周波数が使われていない事を確認してから送信してください。
+　・同一局との交信はＨＦ、ＶＨＦを問わず１日１回のポイントしか認めない。クロスバンドによる交信は認めない。
+　・同一日は国際標準時間で定義する。
+　・同時に２波以上の電波の発射によるものはポイントとしない。
+　・ラウンドＱＳＯを認めないので、実質少ないチャネルしか使用できない周波数帯では、長時間周波数を占有しないように運用して下さい。
+　・バンドプランを遵守し、各局の自主的な判断で多くの局にチャンスが得られるように運用を心掛けてください。
+　・コンテスト中、「自分の自画像」を送らない局との交信も得点として認めますが、可能な限り自画像を入れた画像で交信してください。
+　・参加者のみなさんの良識で、サマリシートの提出を、お願いします。
+　・サマリシートの内容が、不明な場合等にはログの提出を求めることがあります。
+
+結果発表
+~~~~~~~~~
+　ログをＳＡＳＥにて送付された局には郵送で通知。
+　その他､ＪＡＳＴＡ事務局のホームページ、ＣＱ誌等に結果を掲載。
+
+その他
+~~~~~~~
+　・送信画像にＪＡＳＡＴのロゴマークを貼り付けて使用できるよう、ＪＡＳＴＡ事務局のホームページ上にロゴマークを置きますので、ダウンロードし積極的にご活用ください。
+　・特定局だけとのナンバー交換を避けて多くの局との交信を、また１日でも多くの運用を楽しんでください。
+
+上記の通りコンテストを実施いたしますので、奮ってご参加下さい。
+                                   ＪＡＳＴＡコンテスト事務局

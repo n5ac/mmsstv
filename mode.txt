@@ -1,0 +1,288 @@
+New SSTV modes added in MMSSTV
+
+Written by JE3HHT Makoto Mori
+Translated into English by JA7UDE Nob Oba
+
+
+1. VIS code
+
+  All the even-parity codes in the VIS have already been used now.  If I use the remaining odd-parity codes for defining new modes, it is a matter of time to run out of them.  For this reason, I have extended the VIS code to 16 bits as follows: 
+
+
+	1900	300ms
+	1200	10ms
+	1900	300ms
+	1200	30ms
+	d0	30ms
+	d1	30ms
+	:	:
+	d15	30ms
+	1200	30ms
+
+	(d0-d15 : 1-1100Hz, 0-1300Hz)
+
+When you assign a code to your new mode, it is a good idea to use an odd parity code, which is not in use now, in the least 8 bits (d0-d7), so as not to get the conventional 8-bit VIS decoder confused.  For this reason, MMSSTV uses VIS code 23H in d0-d7.  If you add a code for your new mode, I would recommend you to assign some code other than 23H in d0-d7, so that you can make full use of upper 8 bits to represent up to 256 modes.
+
+
+2. MP mode
+
+MP mode is based on the color difference scheme used in PD mode.  I have added this mode for alleviating multi-path/jitter effects on the 20-meter band.  To increase the scan time for each pixel, the color information is compressed along the vertical axis.
+
+
+Mode	Size	VIS	TW [ms]
+MP73	320x256	2523h	140.000
+MP115	320x256	2923h	223.000
+MP140	320x256	2a23h	270.000
+MP175	320x256	2c23h	340.000
+
+
+	1200Hz	9.000ms
+	1500Hz	1.000ms
+	Y(odd)	TW
+	R-Y	TW
+	B-Y	TW
+	Y(even)	TW
+	(Repeat 128 scans)
+
+
+3. MR/ML mode
+
+MR/ML mode is based on the color difference scheme used in Robot 24/72 mode.  It is aimed to provide good resolution under good condx.  The color information is compressed along the horizontal axis.
+
+Mode	Size	VIS	TW [ms]
+MR73	320x256	4523h	138.000
+MR90	320x256	4623h	171.000
+MR115	320x256	4923h	220.000
+MR140	320x256	4a23h	269.000
+MR175	320x256	4c23h	337.000
+ML180	640x496	8523h	176.500
+ML240	640x496	8623h	236.500
+ML280	640x496	8923h	277.500
+ML320	640x496	8a23h	317.500
+
+	1200Hz	9.000ms
+	1500Hz	1.000ms
+	Y	TW
+	LP	0.100ms
+	R-Y	TW/2
+	LP	0.100ms
+	B-Y	TW/2
+	LP	0.100ms
+	(Repeat 256 or 496 scans)
+
+	LP = output the last pixel signal
+
+4.MP-Nモード
+　This is a narrow band version of the MP mode. The scan signals occupy 2044Hz to 2300Hz.
+
+Mode	Size	N-VIS	TW[ms]
+MP73-N	320x256	02h	140.000
+MP110-N	320x256	04h	212.000
+MP140-N	320x256	05h	270.000
+
+	1900Hz	9.000ms
+	2044Hz	1.000ms
+	Y(odd)	TW
+	R-Y	TW
+	B-Y	TW
+	Y(even)	TW
+	(Repeat 128 scans)
+
+5.MC-Nモード
+  This is a narrow bande version of the RGB mode. The scan signals occupy 2044Hz to 2300Hz.
+
+Mode	Size	N-VIS	TW[ms]
+MC110-N	320x256	14h	143.000
+MC140-N	320x256	15h	180.000
+MC180-N	320x256	16h	232.000
+
+	1900Hz	8.000ms
+	2044Hz	0.500ms
+	R	TW
+	G	TW
+	B	TW
+	(Repeat 256 scans)
+
+7.N-VISコード
+  The VIS code of the narrow band modes are defined by the 24-bit FSK as follows. One symbol consists of 6 bits.
+
+	1900Hz	300ms
+	2100Hz	100ms
+	1900Hz	22ms	start bit
+	D05	22ms	(1=1900Hz, 0=2100Hz)
+	D04	22ms		:
+	D03	22ms		:
+	D02	22ms
+	D01	22ms
+	D00	22ms
+	D15	22ms
+	D14	22ms
+	D13	22ms
+	D12	22ms
+	D11	22ms
+	D10	22ms
+	D25	22ms
+	D24	22ms
+	D23	22ms
+	D22	22ms
+	D21	22ms
+	D20	22ms
+	D35	22ms
+	D34	22ms
+	D33	22ms
+	D32	22ms
+	D31	22ms
+	D30	22ms
+
+	D0(D05-D00) = 101101
+	D1(D15-D10) = 010101
+	D2(D25-D20) = N-VIS
+	D3(D35-D30) = 010101 .xor. N-VIS
+
+	e.g. MP73-N = 101101 010101 000010 010111
+
+It is free to use these modes in any kind of software or equipment.  You do not have to inform me.  Feel free to do it.
+
+73 Mako
+
+
+*
+*
+********** Japanese *************************************************
+MMSSTVで追加したモード
+
+1.VISコード
+  現在偶数パリティのVISコードは既に一杯であり、残りの奇数パリティをそのまま使えばすぐに満杯になるのは時間の問題です。そこでMMSSTVで追加したモードでは以下のようにVISコードを16ビットに拡張してあります。
+
+	1900	300ms
+	1200	10ms
+	1900	300ms
+	1200	30ms
+	d0	30ms
+	d1	30ms
+	:	:
+	d15	30ms
+	1200	30ms
+
+	(d0-d15 : 1-1100Hz, 0-1300Hz)
+
+　新規にコードを割り当てる場合、d0-d7までの下位8ﾋﾞｯﾄは現在空きの奇数パリティ部分を使い、既存の8ﾋﾞｯﾄVISデコーダーに対して影響を与えないようにするのが望ましいと思います。
+　MMSSTVはこの目的のためにVISコード23Hをd0-d7部分に使用していますが、もしあなたが新規にモードを作成する場合、23H以外の空きのVISコードを使うことをお勧めします。そうすれば上位8ﾋﾞｯﾄ分(256種類)をまるまるあなたのモードで埋め尽くすことができます。
+
+
+2.MPモード
+　PDモードと同じ方式の色差方式のモードで、２０ｍでのマルチパス/ジッタ対策のために設けました。ピクセル当たりのスキャン時間を長くするために垂直方向の色情報が圧縮されています。
+
+Mode	Size	VIS	TW[ms]
+MP73	320x256	2523h	140.000
+MP115	320x256	2923h	223.000
+MP140	320x256	2a23h	270.000
+MP175	320x256	2c23h	340.000
+
+
+	1200Hz	9.000ms
+	1500Hz	1.000ms
+	Y(odd)	TW
+	R-Y	TW
+	B-Y	TW
+	Y(even)	TW
+	(Repeat 128 scans)
+
+3.MR/MLモード
+　Robot24/72モードと同じ方式の色差方式のモードで、比較的良好なCondx下で見た目の解像度を得るのが狙いです。水平方向の色情報が圧縮されています。
+
+Mode	Size	VIS	TW[ms]
+MR73	320x256	4523h	138.000
+MR90	320x256	4623h	171.000
+MR115	320x256	4923h	220.000
+MR140	320x256	4a23h	269.000
+MR175	320x256	4c23h	337.000
+ML180	640x496	8523h	176.500
+ML240	640x496	8623h	236.500
+ML280	640x496	8923h	277.500
+ML320	640x496	8a23h	317.500
+
+	1200Hz	9.000ms
+	1500Hz	1.000ms
+	Y	TW
+	LP	0.100ms
+	R-Y	TW/2
+	LP	0.100ms
+	B-Y	TW/2
+	LP	0.100ms
+	(Repeat 256 or 496 scans)
+
+	LP=最終ピクセルの信号を出力
+
+4.MP-Nモード
+　MPモードと同じ方式の狭帯域版です。スキャン信号は2044Hz～2300Hzの範囲に収めます。
+
+Mode	Size	N-VIS	TW[ms]
+MP73-N	320x256	02h	140.000
+MP110-N	320x256	04h	212.000
+MP140-N	320x256	05h	270.000
+
+	1900Hz	9.000ms
+	2044Hz	1.000ms
+	Y(odd)	TW
+	R-Y	TW
+	B-Y	TW
+	Y(even)	TW
+	(Repeat 128 scans)
+
+5.MC-Nモード
+  RGBモードの狭帯域版です。スキャン信号は2044Hz～2300Hzの範囲に収めます。
+
+Mode	Size	N-VIS	TW[ms]
+MC110-N	320x256	14h	143.000
+MC140-N	320x256	15h	180.000
+MC180-N	320x256	16h	232.000
+
+	1900Hz	8.000ms
+	2044Hz	0.500ms
+	R	TW
+	G	TW
+	B	TW
+	(Repeat 256 scans)
+
+7.N-VISコード
+  狭帯域モード用のVISコード(N-VIS)を以下のような24bitsのFSKで定義します。6bitsを１シンボルとして取り扱います。
+
+	1900Hz	300ms
+	2100Hz	100ms
+	1900Hz	22ms	start bit
+	D05	22ms	(1=1900Hz, 0=2100Hz)
+	D04	22ms		:
+	D03	22ms		:
+	D02	22ms
+	D01	22ms
+	D00	22ms
+	D15	22ms
+	D14	22ms
+	D13	22ms
+	D12	22ms
+	D11	22ms
+	D10	22ms
+	D25	22ms
+	D24	22ms
+	D23	22ms
+	D22	22ms
+	D21	22ms
+	D20	22ms
+	D35	22ms
+	D34	22ms
+	D33	22ms
+	D32	22ms
+	D31	22ms
+	D30	22ms
+
+	D0(D05-D00) = 101101
+	D1(D15-D10) = 010101
+	D2(D25-D20) = N-VIS
+	D3(D35-D30) = 010101 .xor. N-VIS
+
+	e.g. MP73-N = 101101 010101 000010 010111
+
+　これらのモードを他の装置に組み込むことは完全に自由です。その際、私への連絡は一切必要ありません。
+
+73, Mako

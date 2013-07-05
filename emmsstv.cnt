@@ -1,0 +1,56 @@
+:Base mmsstv.hlp
+1 MMSSTV
+2 Description=IDH_910
+2 Main Screen=IDH_6310
+2 History=IDH_1110
+2 System Requirements=IDH_1310
+2 Modes=IDH_1410
+1 Receive
+2 Frequencies=IDH_1510
+2 Tones=IDH_1610
+2 Auto start=IDH_1710
+2 Manual start=IDH_1810
+2 Auto start & restart=IDH_1910
+1 Slant Adjust
+2 Manual=IDH_2110
+2 Auto=IDH_2210
+2 Sync Point=IDH_2310
+1 Receive history
+2 Images=IDH_2510
+1 Transmission
+2 Basics=IDH_2710
+2 Image preparation=IDH_2810
+2 Mode Selection=IDH_2910
+2 Transmission=IDH_3110
+2 Tx Slant=IDH_3210
+2 Tune/ Cw ID=IDH_3310
+1 Templates
+2 Functions=IDH_3510
+2 Superimpose=IDH_3610
+1 Stock Area
+2 Functions=IDH_3810
+1 Radio Commands
+2 Commands=IDH_4010
+1 Demodulator
+2 Config=IDH_4210
+2 Zero Cross=IDH_4410
+2 PLL=IDH_4510
+2 VCO Gain=IDH_4610
+2 Loop LPF=IDH_4710
+2 Limiter=IDH_4910
+2 Differentiator=IDH_6410
+2 Out LPF=IDH_4810
+2 Linear Calibration=IDH_5010
+2 Level Converter=IDH_6510
+2 Profile=IDH_5110
+1 Sampling Frequencies
+2 Frequencies=IDH_5310
+1 Sound card clock
+2 Calibration=IDH_5510
+1 Setup Misc
+2 Buffer=IDH_5710
+2 Priority=IDH_5810
+2 Device ID=IDH_5910
+2 Source=IDH_6010
+2 Clock=IDH_6110
+1 Closing Remarks=IDH_6210

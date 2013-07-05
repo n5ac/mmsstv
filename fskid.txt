@@ -1,0 +1,106 @@
+MMSSTV FSKID
+
+[Code composition]
+
+The FSKID used in MMSSTV is sent by using 45.45 baudot FSK.  One symbol is composed of 6 bits (B5-B0).
+
+	1500Hz	300ms	(1900Hz in a narrow mode)
+	2100Hz	100ms
+	1900Hz	22ms	start bit
+	B5	22ms	(1=1900Hz, 0=2100Hz)
+	B4	22ms		:
+	B3	22ms		:
+	B2	22ms
+	B1	22ms
+	B0	22ms
+	B5	22ms
+	:
+	B0	22ms
+	B5	22ms
+	:
+	B0	22ms
+	:
+
+[Call sign]
+
+	$2A C1 C2 ... CN $01 XSUM
+		XSUM = C1 xor C2 xor ... xor CN
+	
+	C1 to CN are modified ASCII code. Code symbols $20 to $5F are represented by $00 to $3F in Cx (x = 1 to N).
+
+[Contest number (3 digits or 4 digits and less than 4096)]
+Following the call sign, MMSSTV sends the contest number as follows:
+
+	$02 HH LL XSUM
+		HH = Upper 6 bits of the number
+		LL = Lower 6 bits of the number
+		XSUM = $02 xor HH xor LL
+
+[Contest number (any string)]
+Following the call sign, MMSSTV sends the contest number as follows:
+
+	S1 S2 ... SN $01 XSUM
+		XSUM = S1 xor S2 xor ... xor SN
+Si (i = 1 to N) is ASCII code minus $20. The original code symbols $30 to $5F are represented by $10 to $3F. 
+
+[Notice]
+You can freely use the MMSSTV compatible FSKID in your program. You do not have to notify me in any case.
+
+73, Mako
+
+
+******************** Japanese ********************
+
+MMSSTVのFSKID
+
+  MMSSTVのFSKIDは6bits(B5-B0)を１シンボルとする以下のようなFSK(45.45bps)で伝送します。
+
+	1500Hz	300ms	(狭帯域モード時は1900Hz)
+	2100Hz	100ms
+	1900Hz	22ms	start bit
+	B5	22ms	(1=1900Hz, 0=2100Hz)
+	B4	22ms		:
+	B3	22ms		:
+	B2	22ms
+	B1	22ms
+	B0	22ms
+	B5	22ms
+	:
+	B0	22ms
+	B5	22ms
+	:
+	B0	22ms
+	:
+
+コールサイン
+~~~~~~~~~~~~
+  以下のように伝送します。
+
+	$2A C1 C2 ... CN $01 XSUM
+		XSUM = C1 ～ CNまでのXOR値
+
+  C1-CNのコールサインはASCIIコード$20～$5Fまでを$00～$3Fに変換して伝送します。
+
+コンテストNR(3桁または4桁の数値で値が4095以下の場合)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  コールサインに続けて以下のように伝送します。
+
+	$02 HH LL XSUM
+		HH = NRの上位6bits
+		LL = NRの下位6bits
+		XSUM = $02 ～ MMまでのXOR値
+
+コンテストNR(任意の文字列の場合)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  コールサインに続けて以下のように伝送します。
+
+	S1 S2 ... SN $01 XSUM
+		XSUM = S1 ～ SNまでのXOR値
+
+  S1-SNの文字列はASCIIコード$30～$5Fまでを$10～$3Fに変換して伝送します。
+
+その他
+~~~~~~
+　MMSSTVコンパチブルのFSKIDを他の装置に組み込むことは完全に自由です。私への連絡は一切必要ありません。
+
+73, Mako

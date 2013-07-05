@@ -1,0 +1,290 @@
+MMSSTV logging utility
+
+First version - February 20, 2001 JE3HHT Makoto Mori
+Translated into English by JA7UDE Nobuyuki Oba
+
+* This document was written based on the logging utility of MMTTY.
+
+
+----------
+MMSSTV logging utility
+----------
+
+MMSSTV logging utility offers only limited functions, such as the call sign 
+search.
+
+The current log file is the file that was most recently opened by MMSSTV.  
+The name of the current log file is displayed at the MMSSTV title bar.  The 
+extension of the file name is "MDT."
+
+To change the current log file, select "Open log file" in the File menu.  
+Most common file name would be your_call_sign.mdt.
+
+
+----------
+Basic operations
+----------
+
+1) Input his/her callsign in the Call box of the log panel.
+2) Push the Find button to see if you have made QSO before.
+3) Call him/her.  If he/she replies to you, push the QSO button.  At this 
+timing, MMSSTV records the starting time in the log.
+4) During the QSO, input other information in other boxes, such as his/her 
+RST, my RST, and QTH.  You can input more information by pushing the Data 
+button.
+5) After the QSO is completed, push the QSO button again.  MMSSTV records 
+the ending time in the log.
+
+
+QSO data editing window
+
+During the QSO, push the Data button to open the data editing window.  The 
+title bar at the top of the window has:
+[Searched callsign]	Entity/Continent	Local_time	QTH.
+
+At the bottom half of the window, the search results are shown.
+
+For the JA stations, you can push the JCC/JCG button (or F7 key) and open 
+the JCC/JCG/AJA selection window.  You can incrementally input the QTH in 
+Rome-ji.
+
+The search results are shown in four different colors:
+Gray:	the callsign being input
+Red:	perfect match
+Green:	callsign match
+Black:	partial match
+
+[Example]
+Search by KH0/JI3IVL
+	KH0/JI3IVL	Red
+	KH0/JI3IVL/P	Green
+	JI3IVL		Green
+	JI3IVL/3	Green
+Search by IVL
+	KH0/JI3IVL	Black
+	JI3IVL		Black
+	JI3IVL/3	Black
+
+
+Log list
+
+The log list can be shown by pushing the List button.  If you want to update 
+the data, double click the target row or hit the return key to open the QSO 
+data editing window.
+
+The QSO data list window has the following functions:
+
+[File menu]
+
+- Open log file
+It is the same as "Open log file" in the File menu of the main window.  Use 
+this function to change the log file.
+
+- Save data now
+It is the same as "Save data now" in the File menu of the main window.  
+MMSSTV writes the data to the log file, closes the log file, and reopens the 
+log file.  It is used to keep the disk updated so as not to lose the log 
+data in case, for instance, power outage.
+
+- Make index
+It rebuilds the callsign index.  Under normal operations, it is not likely 
+to break the index.  However, if you cannot search the callsign, try this 
+function.
+
+- Load MMLOG TextFile
+It reloads the log data in MMLOG text format into the log (comment by 
+JA7UDE, MMLOG is a logging utility also made by Mori san).
+
+- Save selected range to MMLOG TextFile
+It saves the selected range to the file in MMLOG text format.
+
+* Use Shift + Up_arrow_key or Shift + Down_arrow_key to select the rows.
+
+- Import
+MMSSTV can import the log data in the following formats:
+	Text
+	ADIF
+	LOG200	(L2)
+	Turbo HAMLOG (DBS, DBR)
+(Comment by JA7UDE, LOG200 and Turbo HAMLOG are Japanese logging programs; 
+there are no English version as of April 08, 2001)
+
+- Export selected range
+MMSSTV can export the selected data in the following formats:
+	Text
+	ADIF
+	LOG200 (L2)
+	Turbo HAMLOG (DBS, DBR)
+
+- Return to MMSSTV
+It closes the log list window and returns to the MMSSTV main manu.
+
+
+[Edit menu]
+
+- Cut
+Copy the row to the clipboard and delete it from the log.
+
+- Insert
+Insert a row and paste the content of the clipboard to it.
+
+- Select all
+Select all the log entries.
+
+- Delete selected range
+Delete the selected rows.
+
+- Sort (Date/Time)
+Sort the selected rows in Date/Time order.
+
+[Find menu]
+
+- Move top
+Move the cursor to the top of the list.
+
+- Move last
+Move the cursor to the bottom of the list.
+
+- Search forward
+Search the callsign forward
+
+- Search backward
+Search the callsign backward
+
+- Search forward again
+Search the callsign forward again
+
+- Search backward again
+Search the callsign backward again
+
+
+----------
+Contest operation
+----------
+
+I have experimentally had the contest functions built into MMSSTV, but I am 
+not sure we have SSTV contests.
+
+- Preparation
+Open a new file with a unique file name for each contest.
+Push Option and select Setup logging.
+Choose the RSV contest number format.
+
+595	%N macro gives the same contest number.  If you need another number than 
+595, put it in the HisRSV field of the very first data.  For example, put 
+5952509 in the first HisRSV field manually.
+
+595+001	%N macro gives the RSV followed by the serial number.  You must put 
+the initial value (595001) in the HisRSV field of the very first data.  
+MMSSTV automatically increments the serial number after it has made a QSO.
+
+
+----------
+Export log to the text file
+----------
+
+You can export the log to a text file.  Push File and select Export selected 
+range.  MMSSTV supports three formats for the text file.
+
+	Comma separated text file (CSV)
+	Tab separated text file
+	Plain text file
+
+MMSSTV has a translation facility of the data fields.  The translation 
+macros supported are as follows:
+
+%NULL		No translation is made.
+%EOD		All the macros after this macro are ignored.
+%YYYY-MM-DD	Date in 2000-07-10 format
+%YY-MM-DD	Date in 00-07-10 format
+%YYYY/MM/DD	Date in 2000/07/10 format
+%YY/MM/DD	Date in 00/07/10 format
+%YY		Year in 00 format
+%YYYY		Year in 2000 format
+%MM		Month in 07 format
+%MON		Month in JAN, FEB, MAR format
+%MON2		Month in Jan., Feb., Mar. format
+%DD		Day in 10 format
+%HHMM		Starting time in 1234 format
+%HH:MM		Starting time in 12:34 format
+%EHHMM		Ending time in 1234 format
+%EHH:MM		Ending time in 12:34 format
+%CALL		Call sign
+%M		Call mark
+%MY		MyRST
+%HIS		HisRST
+%MYRST		MyRST (adjusted its length according to the mode)
+%HISRST		HisRST (adjusted its length according to the mode)
+%FREQ		Freqency in MHz
+%MBAND		Frequency in band
+%KHZ		Frequency in KHz
+%MODE		Operation mode
+%POWER		Power
+%NAME		Name
+%QTH		QTH
+%REM		Remark
+%QSL		QSL information
+%S		QSL sent mark
+%R		QSL received mark
+%ENV		Environment variables
+%OPT1		Optional field 1
+%OPT2		Optional field 2
+%USR1		User field 1
+%USR2		User field 2
+
+Any other texts are copied "as is."  If you specify Max, the length of each 
+row is limited by Max.  If you specify Max=0, the length of each row is not 
+limited.
+
+Check UTC if you want to output the date and time in UTC.
+Check Double if you want to quote each field with ".
+
+----------
+Import from text
+----------
+
+MMSSTV can import the log data from a text file.  Push File and select 
+Import.  The text file imported to MMSSTV must have one QSO in one row.  
+Three formats below are supported:
+
+	Comma separated text (CSV)
+	Tab separated text
+	Plain text
+
+The translation facility stated in the export section can be used for the 
+file import as well.
+
+Check UTC if you want to read the date and time in UTC.  MMSSTV converts 
+them in JST.
+
+
+----------
+Log data
+----------
+
+Date            	- Predefined (e.g., 95.12.23)
+JST (Stating time)	- Predefined (e.g., 2104)
+END (Ending time)	- Predefined (e.g., 2104)
+Call             	- Up to 16 characters
+M (call mark)  	- One arbitrary character
+RST (His, My)      	- Up to 20 characters
+Band             	- Predefined (14.025 is OK)
+Mode             	- Predefined (CW, SSB, AM, FM, RTTY, etc)
+Pow              	- Up to 4 characters
+Name             	- Up to 16 characters
+QTH              	- Up to 28 characters
+Rem              	- Up to 56 characters
+QSL              	- Up to 54 characters
+S (QSL Send)      	- One arbitrary character
+R (QSL Recv)      	- One arbitrary character
+Env   			- Natural number 1 to 65535
+Opt1             	- Up to 8 characters
+Opt2             	- Up to 8 characters
+Usr1             	- Up to 8 characters (shared with HisRST)
+Usr2             	- Up to 8 characters (shared with MyRST)
+
+
+
+
+73 de JE3HHT Makoto Mori
+

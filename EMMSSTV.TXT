@@ -1,0 +1,784 @@
+Basic operations of MMSSTV
+
+Version 1.08 - July 12, 2002 by JE3HHT Makoto Mori
+Translated into English by JA7UDE Nobuyuki Oba
+
+========
+Preface
+========
+
+This program is for transmitting and receiving SSTV using a PC soundcard. I was making a utility to adjust the soundcard clock for PSK31 programs. However, I have changed my mind, and the utility has eventually become an SSTV program.
+
+I thought that I should have made at least one SSTV QSO with this MMSSTV and then declared it as the release version 1.0.  However, I am very busy on my own business and will have no time for amateur radio.  In addition, there seem to be some people already using this program.  At this time, I have decided to release this version as 1.00.
+
+========================
+Uninstall MMSSTV
+========================
+
+MMSSTV does not add anything to the Windows registry.
+Delete the entire directory where MMSSTV is installed.
+
+
+========
+System requirement
+========
+
+OS:			Windows 95, 98, 98SE, ME, NT, 2000
+Soundcard:		16-bit 11025Hz or 22050Hz
+Video adaptor:		256 or more colors (16- or 24-bit video adaptor is
+recommended)
+RAM:			32MB or more
+
+I managed to run MMSSTV on my old PC with a Pentium 100MHz, but I strongly recommend a faster CPU.
+
+The operation speed of MMSSTV is highly dependent on the performance of the video adaptor.  In other words, even if two PCs have the same CPU, they should give different performance in accordance with the equipped video adaptor.  In particular, the 256-color video adaptor is likely to consume more CPU power for the pallet calculation.  For this reason, a 16- or 24-bit color adaptor is strongly recommended.
+If a 256-color video adaptor is used, the displayed colors are affected by the performance of the pallet calculation.
+
+To save the CPU power, try the following steps.
+ - Increase the FIFO size of the soundcard.
+    (select Option, select the Misc tab, and increase the value
+    in the sound FIFO size)
+ - Disable the RxBPF
+    (select Option, select the RX tab, and check RxBPF OFF)
+ - Choose RX buffer FILE or turn it off
+    (select Option, select the RX tab, and check NONE or FILE
+     in the RX buffer pane)
+ - Turn the TX BPF off
+    (select Option, select TX tab, and uncheck Tx BPF)
+
+In default, the Loopback is turned off.  When it is turned on, MMSSTV performs TX and RX in parallel and increases the CPU load.  Make sure you turn it off if your PC cannot afford to run them in parallel.
+
+
+--- IMPORTANT NOTICE ---
+The RX buffer temporarily stores the receiving or just received image to get it back to the RX window after adjusting the slant and phase.  The buffer stores 270-second sound data, and therefore it would cause page swapping if the RAM is selected or if the physical memory size of your PC is not sufficient to keep the data on the memory.  If you have intermittent halts during the receive operation, please select FILE or turn it off.
+
+The size of the receive buffer is BIG; probably bigger than you expect. If you do not use the automatic slant adjustment function, you should not have any operation difficulties without the receive buffer.
+
+
+========
+PC and radio hookup
+========
+
+You can use the same interface of MMTTY.
+Refer to the MMTTY help.
+
+========
+PTT
+========
+
+You can use the same interface of MMTTY.
+Refer to the MMTTY help.
+
+
+========
+SSTV modes
+========
+
+MMSSTV supports the following SSTV modes.
+
+Mode		Duration (sec)	Size	Method
+Robot B/W 8	8		160x120	Mono tone
+Robot B/W 12	12		160x120	Mono tone
+Robot 24	24		160x120	Color differentiation
+Robot 36	36		320x240	Color differentiation
+Robot 72	72		320x240	Color differentiation
+AVT 90		90		320x240	RGB (no synchronization pulse involved)
+Scottie 1	110		320x256	RGB
+Scottie 2	71		320x256	RGB
+Scottie DX	269		320x256	RGB
+Martin 1	114		320x256	RGB
+Martin 2	58		320x256	RGB
+SC2-180		182		320x256	RGB
+SC2-120		122		320x256	RGB
+SC2-60		62		320x256	RGB
+PD50		50		320x256	Color differentiation
+PD90		90		320x256	Color differentiation
+PD120		126		640x496	Color differentiation
+PD160		161		512x400	Color differentiation
+PD180		187		640x496	Color differentiation
+PD240		248		640x496	Color differentiation
+PD290		289		800x616	Color differentiation
+P3		203		640x496	RGB
+P5		305		640x496	RGB
+P7		406		640x496	RGB
+
+As far as I know, all the domestic SSTV QSOs in JA are made in the Scottie 1 mode.  In US, Scottie 1 and 2 are commonly used.  In EU, Martin 1 and 2 are commonly used.
+
+The following modes are in the experimental phase.
+
+MP73		73		320x256	Color differentiation
+MP115		115		320x256	Color differentiation
+MP140		140		320x256	Color differentiation
+MP175		175		320x256	Color differentiation
+MR73		73		320x256	Color differentiation
+MR90		90		320x256	Color differentiation
+MR115		115		320x256	Color differentiation
+MR140		140		320x256	Color differentiation
+MR175		175		320x256	Color differentiation
+ML180		180		640x496	Color differentiation
+ML240		240		640x496	Color differentiation
+ML280		280		640x496	Color differentiation
+ML320		320		640x496	Color differentiation
+
+MP mode: It is based on the color difference scheme that the PD mode uses.  This mode should be useful for reducing multi-path distortion and jitter.  The scan time for each pixel is longer than the other modes, but the color information along the vertical axis is compressed.
+
+MR/ML mode: It is based on the color difference scheme that the Robot 24/72 mode uses.  This mode is aimed for offering good resolution in good condx.  The color information along the horizontal axis is compressed.
+
+These modes are not new to SSTV actually, but I have added them by way of trial.  In particular, I have considered good trade-off between the transmission time, picture size, and quality.  As a new trial, the VIS signal is expanded to 16 bits.
+
+
+========
+SSTV operating frequencies
+========
+
+In JA, the most active frequency is 7.033 MHz LSB.  The common frequencies in the world are: 14.230, 21.340, and 28.680 MHz USB.  I have noticed that these frequencies are crowded nowadays.  I recommend you make QSY after you once made a contact at these call frequencies to avoid unexpected QRM.
+
+
+========
+Receive SSTV
+========
+
+(1) Tone frequency
+
+SSTV's tone frequencies are defined as follows:
+	Synchronization pulse	1200 Hz
+	Low level of the image	1500 Hz
+	High level of the image	2300 Hz
+
+There are four marker lines in the spectrum window of MMSSTV.  From left to right:
+	Green line		1200Hz	Synchronization pulse
+	Yellow line		1500Hz	Low level of the image
+	Yellow dotted line	1900Hz	Center level of the image
+	Yellow line		2300Hz	High level of the image
+
+To tune the frequency, make the signal energy be laid between the 1500Hz and 2300Hz marker lines.  Alternatively, you can tune the receiver so that the synchronization pulses are on the 1200Hz marker line.
+However, the synchronization pulse is very short, so it might take time for you to get used to adjusting the frequency in this way.
+
+Since SSTV QSOs are made on the fixed common frequencies, you probably do not have difficulty in tuning the radio after you have done once.
+
+(2) Automatic start
+
+When the Auto button in the RX mode pane is depressed, MMSSTV automatically starts the receive operation in response to the start trigger signal.
+The start trigger signal is called VIS signal, which consists of the 1200MHz marker signal and the SSTV mode code (1100Hz and 1300Hz FSK).  MMSSTV detects the signal by using a resonant FSK demodulator, and automatically starts the receive operation if it finds the mode supported.
+
+To automatically start receiving, MMSSTV provides another method, which measures the interval time of the synchronization pulses.  If you do not want to use this method, go to Option, select RX tab and choose 'VIS only' in the auto start option.
+
+* Squelch
+Four levels (Lowest, Lower, Higher, and Highest) for the trigger threshold can be selected.
+Lowest makes MMSSTV trigger with the weakest signal.
+Highest makes MMSSTV trigger with the strongest signal.  In other words, only the strong signal can kick off the receive operation.
+
+(3) Manual start
+
+In case MMSSTV does not automatically start receiving or you want to start receiving not from the beginning, push one of the mode buttons below the Auto button.  In JA, HL, and US, try Scottie 1.  In EU, try Martin 1.
+
+(4) Automatic stop, restart and resync
+
+When the auto stop in the RX window of the Setup MMSSTV is checked, MMSSTV automatically stops receiving in case it has lost the synchronization signal (this does not work in AVT90).
+
+When the auto start in the RX window of the Setup MMSSTV is checked, MMSSTV restarts the receiving from the beginning in case it detects the VIS signal even during the receive operation.  It should be noted, however, that MMSSTV would not be able to detect the VIS signal because of the RxBPF effect.
+
+When the auto resync box in the RX window of MMSSTV Setup is checked, MMSSTV automatically attempts to re-synchronize the RX image. This is useful if the MMSSTV has lost the synchronization during RX.
+However, a couple of lines are displayed with the old synchronization timing and therefore they might appear as a thin bar.
+
+
+(5) Slant adjustment
+
+MMSSTV latches the SSTV signal with respect to the soundcard clock.  For this reason, you would have a slanted image if the soundcard clock of your PC is not correctly calibrated or if the timing of the received signal is discriminated.  There are three ways to adjust the slant.
+
+- High-accuracy slant adjustment
+- Automatic slant adjustment
+- Manual slant adjustment
+
+High-accuracy slant adjustment and Automatic slant adjustment analyze the timing of the received signal to automatically adjust the slant.  They, however, might not work well in the situations of QRM, multipath, or weak signals.
+
+
+The adjusted clock timing is applied only to the current image; it is not memorized in the MMSSTV.  If you want to keep the timing adjusted, push the Mem button.  The adjusted timing is used for all the images afterwards.
+
+
+== High-accuracy slant adjustment ==
+
+In this method, MMSSTV uses the least square method to solve the linear equation for analyzing the synchronization timings.  For high quality RX signals, it will give the error less than 2ppm.
+To start the high-accuracy slant adjustment, push the NicoNico button (comment by JA7UDE: the smiley button).  You also can start it by right clicking on the sync or RX window and selecting "High-accuracy slant adjustment" in the pop-up menu.  It should be noted that you must have received at least 16 scan lines to make this adjustment operational.  The more the scan lines, the better the accuracy.
+
+
+* You cannot use this method if you turn the RX buffer off.
+
+
+== Automatic slant adjustment ==
+
+
+In Automatic slant adjustment, MMSSTV periodically measures the interval of the synchronization signals and automatically adjust the slant.  When you leave this mode turned on, MMSSTV adjust the image in real time, but it gives slightly less accuracy than the High-accuracy slant adjustment.
+
+To start this method, check the Auto slant box in the RX tab of the Setup MMSSTV menu.  You also can start it by right clicking on the RX window and selecting Auto slant adjustment in the pop-up menu.
+
+
+* You cannot use this method if you turn the RX buffer off.
+
+
+
+== Manual slant adjustment ==
+ Click the Sync tab of the main window and do the following procedure.
+
+1) Push Slant button
+2) Click the upper right edge of the synchronization signal (white line)
+3) Click the lower right edge of the synchronization signal (same white line)
+
+The synchronization signal is displayed in a relatively fat line, so you must click the same side.  Immediately after you click once on the line, a guide cursor is displayed.  Adjust the cursor in parallel with the synchronization signal line, and click again.
+
+According to this procedure, MMSSTV recalculates the sampling clock of the soundcard and adjusts the receiving or just received image.  If you do not obtain the acceptable result, repeat the procedure.
+
+In case of small slant, it is a good idea to use the up-down button at the bottom of the Sync window.  Click on the View menu, select Always show RX viewer, push the up-down button with looking at the slant of the image.
+
+
+When you have obtained the successful adjustment and want to use it as the default frequency, push the Mem button; otherwise MMSSTV applies the adjustment to the current image only.
+
+* If you turn the RX buffer off, you cannot redraw the picture after adjusting the slant.
+
+
+(6) Fine tune of the synchronization point
+
+MMSSTV automatically gets the receive operation synchronized with the transmitted image except in case of AVT90.  However, it at times fails to do so in very bad conditions.  You should immediately become aware of such a condition because the image is ill colored.
+
+If you are aware of the case, try the procedure below:
+
+1) Push Sync tab of the main window.
+2) Push Phase button.
+3) Click the left edge of the synchronization line (fat white line).
+
+MMSSTV arranges the image so that the clicked point becomes the leftmost position of the image window.  If you do not get it right position, repeat the procedure.
+
+AVT90 does not have the synchronization signal in the image data.  For this reason, you will see only a monochrome image in the Sync window.  You can click one of the gaps (there are three gaps).
+
+* If you turn the RX buffer off, you cannot redraw the picture after you adjust the phase.
+
+
+
+========
+Receive history
+========
+
+MMSSTV can store up to 32 received images in default.  To increase or decrease this number, click Option, select Setup, click Misc tab, and change the value in the History max box.  If the number of stored images would exceed the specified value, the oldest image is erased in an FIFO manner.
+
+It should be noted that one image requires about 200KB disk space, and thus 256 images require about 50MB.  Pay attention to the disk space of your PC.
+
+To reduce the disk space, you could use the JPEG format.  Click the picture with the right button of your mouse and select Use JPEG format in the pop-up menu.
+
+The RX history is only used for a temporary buffer.  The old pictures will automatically be deleted.  If you want to keep them, right click and check the auto copy to another folder.
+
+With this automatic copy function turned on, MMSSTV records the index into the QSL field of the log so that it can retrieve the picture later.
+
+To manually copy the history picture to another folder, drag and drop the picture in the history window to the QSL box in the log window.  To use this function, you must define the name of the target folder in advance.
+
+MMSSTV automatically records the index in the QSL field of the log, either if the auto copy is turned on or if the history image is dropped in the QSL box.  Using the MMSSTV log facility, you anytime can refer to the image by pressing the Image button.
+
+
+
+========
+Transmit SSTV
+========
+
+To transmit an SSTV image, click TX tab of the main window.  The image you see there is transmitted (What You See is What You Transmit).  Adjust the mic gain appropriately.
+
+	 *****  DO NOT USE SPEECH PROCESSOR  *****
+
+(1) TX image preparation
+
+There are several ways to prepare the TX image.
+
+1. Drag&drop an image from the stocked picture gallery at the bottom in the main window to the TX window.
+
+2. Drag&drop an image from the thumbnail window of the folder (View -> Always show thumbnails of files folder) to the TX window.
+
+3. Drag&drop an image from Windows file manager (Explorer) to the TX window.
+
+4. Drag&drop an image from another image manipulation tool that supports Drag&drop to the TX window.
+
+5. Copy&paste an image from another image manipulation tool to the TX window through the Windows clipboard.
+
+You can make the TX image superimposed with a template.  The template operation is explained in the later section of this document.
+
+Click the TX image with the right button of the mouse to get a pop-up menu that facilitates image manipulations, such as file load and save.  Drag&drop from Internet Explore is also supported.
+
+
+(2) Mode selection
+
+Select the SSTV mode.
+
+* If you uncheck "SSTV mode fixed" in the TX page of MMSSTV Setup option, MMSSTV automatically uses the SSTV mode that was used by the most recently received RX image.
+
+
+(3) Transmission
+
+Push the TX button at the left bottom of the window to start transmission.  The horizontal marker line moves from top to bottom as the image is transmitted.  MMSSTV automatically returns to RX after it completes the transmission.  If you want to abort the transmission, push the TX button again.
+
+MMSSTV has a 12-second sound buffer, which should be big enough in the normal environment.  If your PC is not powerful, you had better not do other operations during the transmission.
+
+If MMSSTV has lost the timing during TX, it shows a caution message after the TX completion.  In this particular case, you might be able to solve this problem by increasing the number of FIFO in the Misc page of the Setup window.
+
+
+(4) Adjustment of the slant of the TX image
+
+Some soundcards (especially PCI form factors') have slightly different frequencies for recording and playing.  In this particular case, even if you have correctly adjusted the clock in RX, you would have a slant image in TX.
+
+MMSSTV has a means to adjust the soundcard clock for TX and RX independently.  Refer to the Soundcard section at the end of this document for details.
+
+(5) Tune button and CWID
+
+For repeaters in US, MMSSTV has a tone generator.  Push the Tune button to transmit a 1750Hz tone.
+
+You can send a CWID after the TX completion.  Check the CWID box in the TX of the Setup window.  This is for a European friend of mine.
+
+
+
+========
+Template
+========
+
+Using a template, you can make a simple picture, which is superimposed to the TX image.  For example, you can use a macro command that puts his/her call sign on the TX image.
+
+
+MMSSTV provides primitive image-manipulation functions, but has no support for the group operations now.
+
+Make picture items using the tool buttons at the bottom of the window.
+
+- Arrow button		Turn on/off the selection mode
+- Line button		Draw line
+
+- Square button		Draw rectangle
+- Shaded square button	Draw rectangle with color pasted
+- T button		Draw text
+- Picture button	Insert picture or history image
+- Color bar button	Draw color bar
+- Scissors button	Cut the item
+- Paste button		Paste the item
+- Color palette button	Change the color
+- L button		Change the property of the selected item
+- f button		Change the font
+
+To use a macro text, for example, push T button and then click the point in the window where the text is placed.  The text input dialog box is displayed.  Push Macro button and select %c to place his/her callsign there.
+
+To move the item, push Arrow button and use drag&drop it.
+
+Here I do not cover all the operations, but they are similar to the DRAW software.  Give it a try by yourself.
+
+* You can use drag&drop to copy an image (BMP or JPG) from a file manager (e.g., Explorer) to the template box.
+
+
+======
+Superimpose the template over the TX image
+======
+
+When you use a template, MMSSTV superimposes all the colors except a transparent one in the template over the TX image.  The default transparent color is defined at the bottom right position of the template window.  You can change the position by right clicking at the arbitrary spot in the window.  However, you must click the spot where no template item resides in.
+
+Special care should be taken if you place a template item at the bottom right of the window.
+
+In version 0.21 or later, the function that automatically replaces the transparent point is default ON.  Therefore, the transparent point is automatically moved to where no template item exists.
+
+You can use any color as the transparent (background) color, but you must choose the color that you do not use in the template.  However, a color bar and an image are the exceptions.  In other words, you even can choose a color that is used in a color bar or an image as a transparent one.
+
+* You can settle a background color that is not used in the template by right clicking on the template and selecting "find unique background color."
+
+If you want to create or edit the TX picture during the QSO, I would recommend you use other editing software programs, which have excellent capability in manipulating images.
+
+The template of MMSSTV is supposed to offer the macro functions, such as his/her call sign, RSV report, and contest numbers.  Therefore, you would not find good reason to use templates if you do not use the logging function.
+
+
+
+========
+Stock area
+========
+
+MMSSTV has a stock area, which can stores up to 300 images.  Each stocked image has the image data and the template information.  To manipulate the clipboard, save and load files, click the stock image with the right button of the mouse.  You will have a popup menu.
+
+To save the disk space, you can use the JPEG format for the stocked images.
+Right click the image and select Use JPEG format in the pop-up menu.
+
+It is a good idea to make a template picture in association with the TX image in advance.  The stocked area can store the images and the templates independently.  However, if you use drag&drop to copy the stock image to the TX window, MMSSTV copies the associated template, too.
+This is effective only if the Show superimposed templates box is checked.
+If the box is not checked, MMSSTV copies the image and the template independently.
+
+The following table shows how MMSSTV performs the drag&drop operation.
+
+
+[Show superimposed templates ON]
+
+From			To			Action
+----------------------------------------------------------------------
+S.pic			TX window		Copy the image and template
+S.template		Template window		Copy the template only
+TX window		S.pic			Copy the image and template
+Template window		S.template		Copy the template only
+
+
+[Show superimposed templates OFF]
+
+From			To			Action
+----------------------------------------------------------------------
+S.pic			TX window		Copy the image only
+S.template		Template window		Copy the template only
+TX window		S.pic			Copy the image only
+Template window		S.template		Copy the template only
+
+
+You can drag&drop an image from Explorer or My Computer to the stock.
+
+It takes substantial time to make the text change in effect in the template.
+For this reason, the window redraw is slowed down during superimposing of the template in the stocked image area.  If you do not like it, try checking off Show superimposed templates or checking on Draft.  In addition, the JPEG format will require a little bit longer time to re-read the file.
+
+* If you get the thumbnail window of the folder displayed on the stocked images window, MMSSTV will use the thumbnail window on behalf of the stocked image window.
+MMSSTV temporarily hides the thumbnail window when you switch to the stocked template window.
+
+
+======================
+Picture size and header
+======================
+
+The number of scan lines in the Robot and AVT modes is 240.  On the other hand, that in the Scottie and Martin modes is 256.  This difference is due to the domestic TV modes on which the SSTV modes are based.
+Robot and AVT were devised in the US and defined to have 240 scan lines after the NTSC.  Scottie and Martin were devised in the UK and defined to have 256 scan lines.  My guess is that, to make them compatible to Robot and AVT, the first 16 lines are used for the header that has no picture data.
+When the receiver uses a scan converter and an NTSC TV set, he/she should see only the 240 scan lines on the TV set.
+
+I think, however, the 16 lines make no sense in the SSTV using PC.  The 16 lines could have some information on the sending picture.
+
+MMSSTV allows users to define the header (16 scan lines) by using the template item.  The following TX modes are supported.
+
+----- Raw picture has 240 lines; the SSTV mode has 256 lines (e.g., Scottie) 
+1) Define the header in the template.
+2) Push "Shift picture for the header color bar" button to shift down the raw picture.
+or
+2) Preserve the upper margin in the picture clipper and copy it to the TX window.
+
+----- Raw picture has 256 lines; the SSTV mode has 256 lines (e.g., Scottie)
+You can put a header to the first 16 lines, or you put no header.  Either is OK.  Bear in mind, however, that some receivers/converters will not be able to display the first 16 lines.
+
+When you use the header, you could push the "Adjust picture for the header color bar" button in the TX window so as not to get the raw picture hidden behind the color bar.  In this case, the aspect ratio of the raw picture is changed.
+
+----- Raw picture has 240 lines; the SSTV mode has 240 lines (e.g., Robot)
+MMSSTV transmits the image without a header.
+
+----- Raw picture has 256 lines; the SSTV mode has 240 lines (e.g., Robot)
+1) Define the header in the template.
+2) Push the "Shift picture and template for 240 line mode" button to shift up the raw picture and the template.  The upper 16 lines of the raw picture are not transmitted.
+or
+Define the template without a header.  The lower 16 lines of the raw picture are not transmitted.  If you push "Adjust picture and template for 240 line mode" button, you do not lose the lower 16 lines but the aspect ratio of the picture is changed. 
+
+
+
+====================
+Program menu
+====================
+
+With the program menu, you can instantly start your favorite programs, such as an image manipulation tool, PSK31, RTTY, and MFSK16 programs.
+
+If you check Suspend box in the Assign menu, MMSSTV automatically goes down to the suspended state and starts the selected program.  In this state, MMSSTV has released the COM and soundcard resources in order to allow the other program to use them.  To restart MMSSTV, first terminate the program and then click the MMSSTV icon in the Windows task bar.
+
+When you want to start the program that is not assigned to the MMSSTV program menu, you can select Suspend in the Program option.
+MMSSTV has released the hardware resources of the COM and soundcard and makes itself iconized.
+
+If you wake MMSSTV up again while the other program that uses the COM and soundcard resources is running, MMSSTV would show an error message.
+In this case, MMSSTV will not be iconized again.  To resume MMSSTV, terminate the other program and wake MMSSTV up again, or select Restore in the Program menu.
+
+* You do not have to check Suspend for an image manipulation tool, because it typically does not use the COM or soundcard.
+
+
+========
+Radio command
+========
+
+
+Refer to the MMTTY manual.
+
+
+
+========
+Demodulator
+========
+
+This section describes the digital signal processing used in MMSSTV.  Refer to Digital.Txt of MMTTY for basic DSP operations.
+
+MMSSTV has three types of demodulators.
+
+(1) Demodulator configuration
+
+MMSSTV's demodulator has the following configuration.
+
+Sound --> BPF (FIR) --+> BPF1100 (IIR) --> VIS symbol '1'
+                      |
+                      +> BPF1300 (IIR) --> VIS symbol '0'
+                      |
+                      +> BPF1200 (IIR) --> Sync
+                      |
+		      ---> Zero cross det. --> Picture data
+			 (1500 to 2300)
+		     or
+		      |
+		      ---> PLL(1500 to 2300) --> Picture data
+		     or
+		      |
+		      ---> Hilbert(1500 to 2300) --> Picture data
+
+
+The zero cross detector's configuration is
+
+  --->  Differentiator ---> Counter ---> Out LPF ---> Pic. data
+
+
+The next figure shows the PLL configuration
+
+  --->  Phase det. ---> Loop LPF  ---->  Out LPF ----> Pic. data
+            |                      |
+            <---- VCO <-------------
+
+The next figure shows the Hilbert transform configuration.  I got this idea from JA6UHL Nishimura-san (MNI TNX to JA6UHL).
+
+  --+-> Delay(N) -> Real
+    |                |==> ATAN -> Differentiator -> LPF -> Pic. data
+    --> FIR(2N) --> Image
+
+
+According to my experiences, they have the following pros and cons.  Please give it a try by yourself to find your favorite method.
+
+Decoder			Zero-cross	PLL		Hilbert transform
+Color accuracy		Fair		Good		Good
+Image resolution	Fair		Fair		Good
+QSB			Good		Fair		Good
+CPU load		Low		Low		High
+Sampling freq.		HB*		HB*		----------
+
+*HB: The higher, the better.
+
+
+In the zero-cross and PLL methods, you can set the cut-off frequency of the OutLPF higher.
+
+In the Hilbert transform, the accuracy of the phase differentiation degrades as the sampling frequency increases.  The default sampling frequency, 11025Hz, gives better results, though MMSSTV does the decimation to keep the transform accuracy.
+
+
+(2) Zero cross detector parameters
+
+[Out LPF]
+This filter smoothes the frequency ingredients obtained by the counter.
+If you want a sharp image, increase the cut-off frequency.
+If you want a low-noise image, decrease the cut-off frequency.
+You can select an IIR or FIR filter for the Out LPF.  However, it seems that they have no significant difference.  The FIR filter is better for low sampling frequency because it consumes lower CPU power than the IIR filter.
+
+
+(3) PLL parameters
+
+The parameters of the PLL affect the picture quality.  Since the behavior of this PLL is just the same as that of the hardware PLL, try adjusting the parameters as you have better results.
+
+[VCO Gain]
+VCO gain strongly affects the response of PLL.  Higher VCO gain gives quicker response; lower VCO gain gives slower response.  To high VCO gain would result in the oscillation of the decoded signal.
+
+[Loop LPF]
+In addition to VCO, the Loop LPF is an important parameter that dominates the loop dumping factor.  Always use a one-order filter.  If you increase the cut-off frequency, the oscillation amplitude of the decoded signal becomes bigger.
+
+
+[Out LPF]
+The Out LPF filter does not affect the response of the PLL because it sits outside of the loop.  It, however, should be noted that it strongly affects the picture quality.  If you want a sharp picture, set the cut-off frequency higher.  If you want a low-noise picture, set it lower.  Adjust it according to your preference.
+
+
+(4) Differentiator
+
+When the Differentiator box is checked, MMSSTV compensates the LPF effect by boosting the high-frequency ingredient of the received image.
+However, it makes the receive image be more likely affected by the noise.
+Try adjusting the effect with the slider for your preference.  As the slider goes right, the differentiator takes sharper effect.
+
+*The differentiator is not related to the differentiator of the zero-cross detector.
+
+
+(5) Level converter
+
+The level converter translates the frequency value derived by the decoder into the color amplitude values.  MMSSTV provides two types of converters, which can be selected in the RX window of MMSSTV Setup.
+
+- Linear converter (uncheck the polynomial box)
+It assumes that the frequency and the color level are linearly related.  It is simple, but the frequency characteristics of the decoder must be linear.
+
+- Polynomial converter (check the polynomial box)
+It uses a 17-th order polynomial formula for the level conversion.  It works better if the frequency characteristics of the decoder are not linear.  Since the converter uses a pre-calculated table to boost the processing speed, it should not require much more CPU load.
+
+It is a good idea to use the polynomial converter for the 11025MHz zero-cross detector because it has a little linearity problem in 2200 to 2300Hz.  As the sampling frequency goes higher, the decoder will have better linearity.  However, even in 11025Hz, the conversion error is 2/256 - 3/256, and therefore the error might not be visible.
+
+MMSSTV starts the automatic calibration by pressing the calibration button in the RX window of MMSSTV Setup.  It takes about 20 seconds.
+After the calibration, MMSSTV shows the frequency characteristics figure.
+If the line of the figure goes straight down to the right, you can uncheck the polynomial converter (you can use the linear converter).
+
+===============
+Profile
+===============
+The default demodulator parameters are settled according to my experiments, which, however, are very limited.  I have had no sufficient time for the parameter optimization.  If you are a master of SSTV, you already have found good parameters.
+
+With the Profile function, you can easily save and load up to 8 sets of the demodulator parameters.  Each set can be named, as you like.
+
+It is a good idea to save your favorite demodulator parameter set as MyDefault before you try many different parameters. If you got lost in the parameter setting, you will be able to step back to the start point.
+
+MMSSTV has a special profile "MMSSTV Default," which cannot be modified by the user.  This is the MMSSTV default parameter set.
+
+* It should be noted that the Profile memorizes the demodulator parameters only.
+
+
+====================
+Supplemental RX filters
+====================
+
+MMSSTV has three supplemental RX filters.
+
+  Sound ---> Notch ---> LMS -+-> BPF ---> Demodulator
+                             |
+                             --> Spectrum display
+
+[Notch]
+ This is a simple BEF (band elimination filter) of FIR type.  The notch filter is engaged when the user left clicks on the spectrum or waterfall window.  To disable the filter, just right click.
+ The notch filter eliminates a beat, but it possibly degrades the image quality if the notch frequency is set in the image transmission frequency range.  If the frequency of the filter is on or close to the synchronization signal, MMSSTV would stop RX for weak SSTV signals if Auto stop function is turned on.
+
+
+[LMS]
+ It is an adaptive filter based on Leaky LMS (Least mean Square) method.  It can be turned on/off using the LMS button in the main window.
+ The default mode is noise smoothing.  You can select automatic notch modes by right clicking on the LMS button.
+
+ The response of the automatic notch filter is intentionally set slow so as not to degrade the image quality.  Even set so, some images will be affected.
+
+
+
+[BPF]
+It is a simple FIR band-pass filter.  You can choose the sharpness in the RX page of the setup MMSSTV menu.  As it is sharper, it is more likely to exclude adjacent QRMs, but on the other hand it degrades the horizontal resolution.
+
+
+================
+TX filter
+
+================
+
+MMSSTV generates the TX signal with the flow shown below.
+
+Picture data ---> LPF ---> VCO ---> BPF ---> D/A ---> Sound data
+                 ON/OFF            ON/OFF
+
+LPF and BPF are used to limit the frequency of the digital output as insurance.
+If the CPU load is too high for TX, you can turn them off.  However, I strongly recommend that you turn the BPF on when you use CWID.
+
+
+[LPF]
+This filter smoothes the signal translation from the image to the frequency domain.
+As a result, the frequency bandwidth is substantially limited and the horizontal resolution of the TX image is slightly sacrificed.
+
+[BPF]
+This filter limits the bandwidth of the TX signal.  It is useful to limit the spectrum spread for CWID.
+
+========
+Sample frequency
+========
+
+MMSSTV has an option that allows the following sampling frequencies:
+
+	8000 Hz		Secondary standard frequency
+	11025 Hz		Primary standard frequency
+	12000 Hz
+	14000 Hz
+	16000 Hz
+	18000 Hz
+	22050 Hz		Primary standard frequency
+	24000 Hz
+	44100 Hz		Primary standard frequency
+
+You will have better quality in the RX images by increasing the sampling frequency and setting the cut-off frequency higher in the zero-cross and PLL decoders.  In the Hilbert transform decoder, on the other hand, I recommend the default sampling frequency 11025Hz.
+
+
+ It should be noted that not all the soundcards support the frequencies listed above all.  All the soundcards, however, should support 11025Hz, 22050Hz and 44100Hz.  In addition, the high frequency dissipates more CPU power and more memory space.
+
+Tips:
+* MMSSTV always calculates the FFT with 2048 points.  To obtain the proper frequency resolution, MMSSTV uses a half frequency for FFT in case the sampling frequency is 18000Hz or higher.  In the same manner, MMSSTV uses a quarter frequency in case of 44100Hz.
+
+
+========
+Clock calibration
+========
+
+In SSTV, the discrimination of the clock appears as a slanted image.  For MMSSTV, you are not required to have the absolute and exact clock frequency value (e.g. 11025Hz).  But it is important to get MMSSTV informed on what the frequency of your soundcard has.
+
+
+In normal situations, you would only have to adjust the slant by using the Sync window.  If you want to calibrate your soundcard very accurately, listen to the standard radio or fax wave.
+
+1) Go Option, Setup, Misc page, and push Adj button.
+2) Receive standard radio wave (e.g., WWV and JJY).
+3) Tune into the tick sound.
+4) Continue listening to the sound for a while.  You have a vertical line.
+5) Click the upper point of the line.
+6) Click the lower point of the line.
+
+You could use FAX broadcasting instead of WWV or JJY, but be sure it has exact timing.  Refer to the MMTTY help for details.
+
+If your soundcard seems to have different clock sampling frequencies for TX and RX, adjust the offset frequency with the following procedure.
+
+1) Adjust the slant in RX.
+2) Go Option, Setup, and TX page.  Select External in the Loopback.
+3) Connect the Line-out to the Line-in of your soundcard.
+4) Transmit an image with Martin 1.
+5) You should have an image through the external feedback.
+6) After completing the image receive, go Sync page and adjust the slant.
+	- You could use the High-accuracy slant adjustment.
+	- Do not push the Mem button
+7) Push the TX(TX offset) button in the sync page.
+8) Make sure that you have no slant in the TX.  If you still have slant, repeat from (6).
+
+It is a good idea to use the High-accuracy slant adjustment at Step 6.  If you are not satisfied with the result, start it again.  Never push the Mem button at this step.
+
+You can use the LoopBack function of a mixer program instead of using the external feedback line.
+
+Although this procedure can be applied only for the soundcard that supports the full-duplex mode, the soundcard that does not support the full-duplex mode should not have different frequencies for TX and RX, and therefore you do not need this calibration.
+
+If you have a report that your TX image is greatly slanted, try changing the soundcard modes, monaural or stereo (Source in the Misc window of Setup MMSSTV).
+
+Some soundcards seem to use different sampling frequencies for the full-duplex and no-full-duplex operations.
+In such a case, the offset calibration using the external loop back does not help.  You should always have the loop back External or consult the QSO report.
+
+
+
+==========
+Setup MMSSTV Misc
+==========
+
+[FIFO]
+FIFO specifies the number of the buffer for the low-level sound processing.  As the number is increased, the possibility of timing loss is decreased because of larger sound processing margin.
+Enlarge the RX-FIFO if you lose the timing in RX.  Enlarge the TX-FIFO if you lose the timing in TX.
+
+[Priority]
+Priority defines the task priority for low level sound processing.  If you lose the sound during RX or TX, raise the priority.  If the response of the menu operations is slow, lower the priority.  Normal is the lowest and Critical is the highest priority.
+
+[DeviceID]
+DeviceID specifies the ID number of the sound card.  When you have only one sound card, put -1 or 0 to DeviceID.  -1 uses the default sound card.  The sound card IDs are sequentially assigned as 0, 1, 2, ....  When you have two sound cards, for example, and want to use the second one for MMSSTV, put 1 to DeviceID.
+
+[Source]
+Source defines the channel of the sound card.  Mono makes the sound card work in the monaural mode.  Left or Right makes the sound card work in the stereo mode and uses one of the channels.  In TX, MMSSTV outputs the sound to both channels irrespective of the Source setting.
+
+[Clock]
+Clock is the sampling frequency of MMSSTV.  Refer to Sample frequency and Clock calibration sections.
+
+
+============================
+Font set up for Hangul and Chinese Windows
+============================
+
+For Hangul and Chinese Windows users, try the following set up.
+1. Click on Option and Setup MMSSTV.
+2. Click on Misc tab.
+3. Push the Misc button in the System font pane.
+4. Select Hangul or Chinese font.  Use the font that has small character spacing.
+5. Push the OK button.
+
+After this setup, you can use Hangul or Chinese FEP for the text input boxes.
+
+It seems that Hangul and Japanese Windows manipulate 8-bit characters in a different manner from English font.  MMSSTV version 1.05 or earlier could not handle the slash zero properly.  MMSSTV 1.05D (1.06 hopefully) has special routine to work around this problem.
+
+======
+Closing remarks
+======
+MMSSTV is a freeware program for amateur radio use.  You can redistribute it as you like.  Please join the following reflector for detailed information,
+
+	http://groups.yahoo.com/group/MM-SSTV/
+
+The JPEG converter in MMSSTV is based on the freeware source code, "IJG code," provided by Independent JPEG Group.
+
+
+73 de JE3HHT Mako
+
+

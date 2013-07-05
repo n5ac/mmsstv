@@ -1,0 +1,289 @@
+MMSSTV repeater mode
+
+		2001.9.11 JE3HHT  Makoto Mori
+		Translated into English by JA7UDE Oba
+
+==========
+Run MMSSTV as a repeater
+==========
+To run MMSSTV in the repeater mode, add "-r" option:
+
+MMSSTV.EXE -r
+
+While MMSSTV is running in the repeater mode, all the standard functions are still operational.  Enjoy SSTV as you usually do.
+
+  If you want to add your call sign and/or the time stamp to the beacon or replay pictures, use templates.  You can specify various templates for these purposes.
+
+  You can change the transmission mode of the replay picture in accordance with the mode of the received picture.  Uncheck "Fixed mode" in the TX tab of the MMSSTV Setup Option.   MMSSTV uses the same mode as the received picture.
+
+  It is recommended to use Hilbert transform for the FM demodulator for better image quality.  Turn on or off "Auto stop," "Auto restart," and "Auto resync" options as you prefer.
+
+
+
+====================
+Introduction of the repeater function
+====================
+MMSSTV repeater function works as follows:
+
+1. MMSSTV returns CW ID after receiving a tone signal for a while.  The default frequency of the tone is 1750Hz.
+2. When MMSSTV starts receiving a picture in the specified time (default is 10 seconds) after the CW ID, it receives and resends the picture.
+3. MMSSTV optionally sends a beacon picture periodically.
+
+MMSSTV keeps watch on the squelch status before starting the TX operation.  When the squelch is open, MMSSTV will not start TX.  Refer to Squelch section of this document for more details.
+
+
+
+==================
+Setup repeater options
+==================
+Click on "Option" and select "Setup repeater" to open the repeater setup window.
+
+If you have changed the following options, you must push the OK button to make them into effect.
+
+[Enabled]
+  Check this box to enable the MMSSTV repeater function.
+
+[SQ level]
+  This specifies the squelch level of the auto-correlator.  When the output level of the auto-correlator exceeds this threshold, MMSSTV does not start TX.  If you put 0 to SQ level, the auto-correlator is turned off and MMSSTV will start TX irrespective of the RX signals.  THIS IS NOT RECOMMENDED, HOWEVER.
+
+  Debug pane displays the output level of the auto-correlator.  Seeing the pane, put an appropriate value, which should be slightly higher than the noise level, to the SQ level box.  It should be noted that MMSSTV never starts TX when it is receiving a picture.  The auto-correlator will not work while MMSSTV is receiving a picture.
+
+
+[Answer]
+Put the CW ID, which MMSSTV transmits in response to the tone signal received, to this box.  The frequency and speed of the CW ID are specified in the MMSSTV Setup window.
+
+[Tone]
+  Tone frequency for accessing the repeater.  The default is 1750Hz, but you have to use a different frequency if you have another repeater on the same channel.  The tone frequency is displayed as a dotted line in the spectrum window.
+
+[Tone det.]
+  Tone detection time (msec).  To access the repeater, you have to continuously transmit the access tone for at least the time period specified here.
+
+[Answer wait]
+  Wait time (msec) for CW ID.  When MMSSTV detects an access tone, it waits for the time specified here and then starts transmitting the CW ID.
+
+[RX timeout]
+  Time out time for receiving a picture.  If MMSSTV does not receive a picture before this timer expires, MMSSTV goes back to the tone waiting state.
+
+[Replay wait]
+  Wait to for the replay.  MMSSTV waits for the time specified here after the completion of RX, and then it starts the replay TX operation.
+
+[Tone sensitivity]
+  Tone detection sensitivity.  Highest is the most sensitive, Lower is the least sensitive.
+
+[Folder]
+  If you specify a folder name here, the TX pictures are automatically saved in the folder.  The folder must pre-exist.  The pictures are stored in the JPEG format.
+
+[Template No.]
+  Select the template numbers for replay and beacon pictures.  Template number 0 inhibits the template loading.
+
+  In the repeater mode, MMSSTV displays a small number at the top left corner of each picture in Stocked pictures and Stocked templates window.
+
+  You can use multiple selections for Template No.  In this case, MMSSTV uses the templates in the specified order.
+
+	Example: 25,26,27	-	Use Template 25, 26, 27, 25, 26, 27, ....
+
+  For the beacon pictures, you can add # in front of the number to send the stocked picture of the same number, with the template superimposed.
+
+	Example: 26,#27,26,#28	-	27 and 28 are sent with 27-th and 28-th pictures, respectively.
+
+  If you do not add #, the beacon pictures are loaded from the latest four pictures in the history.  
+  If you do not want to use a template, specify a number of any empty templates.
+
+[Beacon-Interval]
+  Beacon interval.  "OFF" disables the beacon.  The timer is reset if MMSSTV receives a picture.
+
+[Beacon-Silence time]
+  MMSSTV keeps watch on the frequency for the specified time before transmitting the beacon.
+
+[Beacon-SSTV MODE]
+  SSTV mode for the beacon picture.
+
+[Beacon-Use image filter]
+  When the beacon pictures are composed from the latest four images in the history, you can use an image filter.  The filter slightly degrades the image resolution, but it dissolves the folding error caused in the scale-down operation. 
+
+[Beacon button]
+  Send the beacon immediately.
+
+
+==========
+Squelch
+==========
+  Squelch works as follows:
+
+1. Cancel the CW ID response
+  If the squelch is not closed 10 seconds after the detection of the access tone, MMSSTV cancels the tone detection and will not transmit the CW ID.
+
+2. Cancel the replay picture
+  If the squelch is not closed 20 seconds after the picture received, MMSSTV will not replay the picture.
+
+3. Suspend the beacon
+  If the squelch is opened in the period of "Silence time," MMSSTV postpones the beacon transmission.  In other words, MMSSTV does not send the beacon at least the band is continuously clear for "Silence time."
+
+  The repeater would cause QRM.  The beacon in particular is automatically transmitted without notice, and thus it is likely to cause QRM.  Pay special attention to the squelch threshold (do not set it too high).
+
+
+==========
+Debug pane
+==========
+The debug pane displays the following values for supervising the repeater operation.
+
+
+State:
+		0 - Waiting for the access tone
+		1 - Detected the access tone
+		2 - Waiting for the CW ID transmission
+		5 - Waiting for the picture receive
+		6 - Receiving the replay picture
+		8 - Waiting for the picture transmission
+		10 - Transmitting the replay picture
+
+Ans:		Number of CW ID transmitted
+RX:		Number of pictures received
+TX:		Number of pictures transmitted
+Level:		Output level of the auto-correlator
+Beacon:	Number of beacons transmitted and the beacon timer value
+
+73, Mako
+
+*
+*
+********** Japanese *************************************************
+MMSSTVのリピータ動作
+
+					2001.9.11 JE3HHT  Makoto.Mori
+
+==========
+◎起動方法
+==========
+  MMSSTVは通常の起動方法ではリピータとして動作しないようになっています。リピータとして動作させるには、起動する際にオプション「-r」を付加しなければなりません。
+
+MMSSTV.EXE -r
+
+　リピータ動作時もMMSSTVの通常のセットアップはすべて有効です。あなたの好みの設定で運用してください。
+
+　リピータ動作時に送信するリプレイ画像やビーコン画像に、あなたのコールサインや受信タイムスタンプ等を入れたい場合は、テンプレートを利用して下さい。それぞれで使用するテンプレートを個別に複数指定することができます。
+　また受信したSSTVモードでリプレイ画像を送信するには、MMSSTV設定画面の送信ページで「モード固定」のチェックを外します。
+　画像受信用のFM復調器は、可能ならば「ヒルベルト変換」を使用すると良いでしょう。「自動停止」、「自動再スタート」、「自動再同期」などはあなたの好みの状態に設定すると良いでしょう。
+
+
+====================
+◎リピータ動作の概要
+====================
+  SSTVリピータは以下のプロトコルで働きます。
+
+1.トーン信号(デフォルト1750Hz)を一定期間受信するとCWIDを返送します。
+2.CWID送信終了後、一定期間(デフォルト10秒)以内に画像の受信を開始
+  すると、受信終了時にその画像を返送します。
+3.定期的にビーコン画像を送信することができます。
+
+　MMSSTVは自動運転中に送信動作に入る場合、スケルチの状態を監視します。もしスケルチが開いている場合、送信は保留または禁止されます。この動作の詳細についてはこのドキュメント内の「スケルチ」の項を参照して下さい。
+
+
+==================
+◎リピータ設定画面
+==================
+  オプションメニューの「リピータ設定画面」を選択するとリピータ設定画面が開きます。
+
+　以下の項目を設定変更した場合、「OK」ボタンを押した時点からその設定内容が有効になります。
+
+[Enabled]
+  これにチェックを付けるとMMSSTVはリピータとして動作します。
+
+[SQ level]
+  自己相関器(Auto Correlator)によるスケルチの検出閾値を設定します。相関器の出力レベルが、ここで設定した値を超えた場合、何らかの信号が存在すると認識されて送信が禁止されます。例外値として０を設定すると、相関器はOFFになり送信が禁止されることはありません（この動作はお勧めできません）。
+
+　Debug枠に表示されるLevelが相関器の出力レベルを表しますので、あなたの受信環境でのノイズレベルよりも大きな値を設定して下さい。なお画像受信中は無条件に送信禁止状態になりますので相関器は働きません。
+
+[Answer]
+　トーンを検出した際に返送するCWIDの文字列を設定します。CWIDのトーン周波数および送信速度は、MMSSTV設定画面のCWIDオプションの設定の影響を受けます。
+
+[Tone]
+  リピータ起動トーンの周波数を選択します。通常は1750Hzを使いますが、同一周波数に他のリピータが存在する場合は異なる周波数を選択しなければなりません。なお設定したトーン周波数はスペクトラム表示画面に点線で表示されます。
+
+[Tone det.]
+  トーン検出時間をms単位で設定します。少なくともこの値の期間、トーンは連続して受信されなければなりません。
+
+[Answer wait]
+  トーン検出後、CWIDを送出するまでの最小ウエイト時間をms単位で設定します。
+
+[RX timeout]
+  CWID送出後、リプレイ画像を受信するまでのタイムアウトをms単位で設定します。この時間を経過しても画像が受信できない場合、リピータはトーン待ち状態に戻ります。
+
+[Replay wait]
+  画像受信終了後、リプレイ画像を送信するまでの最小ウエイト時間をms単位で設定します。
+
+[Tone sensitivity]
+  トーン検出の感度を設定します。「Highest」は最も感度が高く、「Lower」は感度が低くなります。
+
+[Folder]
+  ここにフォルダ名を定義すると、リプレイ画像を送信する際に、その送信画像をそのフォルダに保存することができます。指定したフォルダは必ず存在しなければなりません。保存されるファイルは必ずJPEGフォーマットになります。
+
+[Template No.]
+  リプレイ画像およびビーコン画像を送信する場合にロードするそれぞれのストックテンプレートの枠番号を設定します。この値を０に設定した場合、テンプレートのロードは行われません。
+  「-r」オプションを付加して起動された場合、MMSSTVはストック画像およびストックテンプレートの各枠の左上にその枠番号を表示しますので、その番号をそのまま指定すると良いでしょう。
+
+  それぞれの設定にはカンマで区切って複数の番号を指定することができます。この場合、MMSSTVは送信する度に、ロードするテンプレートを指定順に変更します。
+
+	e.g.	25,26,27	３つのテンプレートを循環させる
+
+　またビーコンの設定については、番号の先頭に#を付けると、同じ枠番号に存在するストック画像から送信画像を同時にロードすることもできます。
+
+	e.g.	26,#27,26,#28	27,28は画像も同時にロード
+
+　#を付けない場合、ビーコン時に送信する画像は、履歴に存在する最新の4画像から自動的に作成されます。
+  テンプレートを使いたくない場合、空のストックテンプレート番号を指定して下さい。
+
+[Beacon-Interval]
+  ビーコンを送信する時間間隔を設定します。OFFを選択するとビーコンの送信は行われません。なおビーコン送出用のタイマーは、画像受信状態になった場合は無条件にリトリガされます。
+
+[Beacon-Silence time]
+  ビーコン送信前にバンドがクリアかどうかを監視する時間を分単位で設定します。
+
+[Beacon-SSTV MODE]
+  ビーコンを送信する際に使用するSSTVモードを選択します。
+
+[Beacon-Use image filter]
+  履歴に存在する最新の4画像からビーコン画像を作成する際、伸縮処理で画像フィルタを使うかどうかを設定します。フィルタを使うと若干解像度を損ないますが、縮小による折り返し歪みが解消されます。
+
+[Beacon]ボタン
+　強制的にビーコンを送信します。
+
+
+==========
+◎スケルチ
+==========
+  スケルチの動作は以下の通りです。
+
+1.応答CWID送信の無効化
+　トーンの検出終了後10秒間スケルチが閉じない場合、そのトーン検出は無効になりCWIDの送信は行われません。
+
+2.リプレイ画像送信の無効化
+　画像受信終了後20秒間スケルチが閉じない場合、リプレイ画像の送信は行われません。
+
+3.ビーコンの保留
+　ビーコン送信時刻以前の「Silence time」で設定される期間にスケルチが開くと、ビーコン送信時刻が延期されます。したがってビーコンは、少なくとも「Silence time」の期間バンドがクリアな状態を維持していなければ送信されないことになります。
+
+  リピータはQRMの原因になる場合があります。特にビーコンは手続きなしで送信されるために他者へ混信を与えがちです。ビーコンを使う場合は、スケルチの閾値にあまり大きな値を設定しないようにして下さい。
+
+
+==========
+◎Debug枠
+==========
+　リピータ設定画面のDebug枠には、リピータ動作を監視するために以下の数値が表示されます。
+
+State	リピータ動作を管理する状態変数
+		0 - トーン待ち中
+		1 - トーン検出開始
+		2 - Answer CWID送信待ち中
+		5 - Replay画像受信待ち中
+		6 - Replay画像受信中
+		8 - Replay画像送信待ち中
+		10 - Replay画像送信中
+
+Ans	CWIDを送信した回数
+RX	画像を受信した回数
+TX	リプレイ画像を送信した回数
+Level	相関器の出力レベル
+Beacon	ビーコンを送信した回数と現在のタイマ値
+
+73, Mako

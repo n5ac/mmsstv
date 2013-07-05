@@ -1,0 +1,4 @@
+#include "res.h"
+
+ID_ICON ICON    DISCARDABLE     "Item.ico"
+ID_BUILTIN	BITMAP	DISCARDABLE	"res\P.bmp"

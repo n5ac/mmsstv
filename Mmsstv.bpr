@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value="Mmsstv.exe"/>
+    <OBJFILES value="Mmsstv.obj Main.obj Sound.obj fir.obj sstv.obj Wave.obj Fft.obj ComLib.obj 
+      Draw.obj Comm.obj cradio.obj TextIn.obj RxView.obj Option.obj HistView.obj 
+      fileview.obj CtrBtn.obj ZoomView.obj ListText.obj PicFilte.obj 
+      StockVew.obj PicSel.obj MacroKey.obj ColorSet.obj LineSet.obj PicRect.obj 
+      LogFile.obj Loglink.obj country.obj Mmcg.obj jpeg\Jutils.obj 
+      jpeg\Jcapistd.obj jpeg\Jccoefct.obj jpeg\Jccolor.obj jpeg\Jcdctmgr.obj 
+      jpeg\Jchuff.obj jpeg\Jcinit.obj jpeg\Jcmainct.obj jpeg\Jcmarker.obj 
+      jpeg\Jcmaster.obj jpeg\Jcomapi.obj jpeg\Jcparam.obj jpeg\Jcphuff.obj 
+      jpeg\Jcprepct.obj jpeg\Jcsample.obj jpeg\Jctrans.obj jpeg\Jdapimin.obj 
+      jpeg\Jdapistd.obj jpeg\Jdatadst.obj jpeg\Jdatasrc.obj jpeg\Jdcoefct.obj 
+      jpeg\Jdcolor.obj jpeg\Jddctmgr.obj jpeg\Jdhuff.obj jpeg\Jdinput.obj 
+      jpeg\Jdmainct.obj jpeg\Jdmarker.obj jpeg\Jdmaster.obj jpeg\Jdmerge.obj 
+      jpeg\Jdphuff.obj jpeg\Jdpostct.obj jpeg\Jdsample.obj jpeg\Jdtrans.obj 
+      jpeg\Jerror.obj jpeg\Jfdctflt.obj jpeg\Jfdctfst.obj jpeg\Jfdctint.obj 
+      jpeg\Jidctflt.obj jpeg\Jidctfst.obj jpeg\Jidctint.obj jpeg\Jidctred.obj 
+      jpeg\Jmemmgr.obj jpeg\Jmemnobs.obj jpeg\Jquant1.obj jpeg\Jquant2.obj 
+      jpeg\Jcapimin.obj jpeg\jhandle.obj PrevView.obj LogList.obj LogSet.obj 
+      Qsodlg.obj ConvDef.obj MmcgDlg.obj LogConv.obj VerDsp.obj ClockAdj.obj 
+      InputWin.obj ColorBar.obj LinearDs.obj FreqDisp.obj RadioSet.obj 
+      TextEdit.obj LogPic.obj BitMask.obj ExtCmd.obj PerSpect.obj RepSet.obj 
+      Scope.obj PlayDlg.obj MMlink.obj TH5Len.obj Hamlog5.obj RMenuDlg.obj"/>
+    <RESFILES value="Mmsstv.res"/>
+    <IDLFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) Main.dfm TextIn.dfm RxView.dfm Option.dfm HistView.dfm 
+      fileview.dfm CtrBtn.dfm ZoomView.dfm ListText.dfm PicFilte.dfm 
+      StockVew.dfm PicSel.dfm MacroKey.dfm ColorSet.dfm LineSet.dfm PicRect.dfm 
+      PrevView.dfm LogList.dfm LogSet.dfm Qsodlg.dfm ConvDef.dfm MmcgDlg.dfm 
+      VerDsp.dfm ClockAdj.dfm InputWin.dfm ColorBar.dfm LinearDs.dfm 
+      FreqDisp.dfm RadioSet.dfm TextEdit.dfm LogPic.dfm BitMask.dfm ExtCmd.dfm 
+      PerSpect.dfm RepSet.dfm Scope.dfm PlayDlg.dfm TH5Len.dfm RMenuDlg.dfm"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value="inet50.lib vcl50.lib"/>
+    <SPARELIBS value="vcl50.lib inet50.lib"/>
+    <PACKAGES value="vclx50.bpi vcl50.bpi vcldb50.bpi vclbde50.bpi vcldbx50.bpi bcbsmp50.bpi 
+      dclocx50.bpi qrpt50.bpi teeui50.bpi vclsmp50.bpi teedb50.bpi tee50.bpi 
+      ibsmp50.bpi nmfast50.bpi inetdb50.bpi inet50.bpi"/>
+    <PATHCPP value=".;jpeg"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value=""/>
+    <SYSDEFINES value="NO_STRICT"/>
+    <MAINSOURCE value="Mmsstv.cpp"/>
+    <INCLUDEPATH value="&quot;c:\program files\borland\cbuilder3\projects&quot;;jpeg;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="&quot;c:\program files\borland\cbuilder3\projects&quot;;jpeg;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026"/>
+    <WARNOPTSTR value=""/>
+  </MACROS>
+  <OPTIONS>
+    <CFLAG1 value="-O2 -H=c:\PROGRA~2\borland\CBUILD~1\lib\vcl35.csm -Hc -Vx -Ve -X- -a8 -b- 
+      -d -k- -vi -c -tW -Tkh30000 -tWM"/>
+    <CFLAG2 value=""/>
+    <CFLAG3 value=""/>
+    <PFLAGS value="-$YD -$L- -$D- -v -M -JPHNE"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zn"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn"/>
+    <IFLAGS value=""/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
+  </LINKER>
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1041
+CodePage=932
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[HistoryLists\hlRunParameters]
+Count=1
+Item0=-r
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=0
+LinkCGLIB=0
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
+  </IDEOPTIONS>
+</PROJECT>

@@ -1,0 +1,53 @@
+=====ファイル JCAPIMIN.C の行数 = 280
+=====ファイル JCAPISTD.C の行数 = 161
+=====ファイル JDAPIMIN.C の行数 = 395
+=====ファイル JDAPISTD.C の行数 = 275
+=====ファイル JCOMAPI.C の行数 = 106
+=====ファイル JCTRANS.C の行数 = 388
+=====ファイル JDTRANS.C の行数 = 143
+=====ファイル JCINIT.C の行数 = 72
+=====ファイル JCMASTER.C の行数 = 590
+=====ファイル JCMAINCT.C の行数 = 293
+=====ファイル JCPREPCT.C の行数 = 354
+=====ファイル JCCOEFCT.C の行数 = 449
+=====ファイル JCCOLOR.C の行数 = 459
+=====ファイル JCSAMPLE.C の行数 = 519
+=====ファイル JFDCTINT.C の行数 = 283
+=====ファイル JFDCTFST.C の行数 = 224
+=====ファイル JFDCTFLT.C の行数 = 168
+=====ファイル JCPHUFF.C の行数 = 833
+=====ファイル JCMARKER.C の行数 = 664
+=====ファイル JDATADST.C の行数 = 151
+=====ファイル JDMASTER.C の行数 = 557
+=====ファイル JDINPUT.C の行数 = 381
+=====ファイル JDMAINCT.C の行数 = 512
+=====ファイル JDCOEFCT.C の行数 = 736
+=====ファイル JDPOSTCT.C の行数 = 290
+=====ファイル JDHUFF.C の行数 = 651
+=====ファイル JDPHUFF.C の行数 = 668
+=====ファイル JDDCTMGR.C の行数 = 269
+=====ファイル JIDCTINT.C の行数 = 389
+=====ファイル JIDCTFST.C の行数 = 368
+=====ファイル JIDCTFLT.C の行数 = 242
+=====ファイル JIDCTRED.C の行数 = 398
+=====ファイル JDSAMPLE.C の行数 = 478
+=====ファイル JDCOLOR.C の行数 = 396
+=====ファイル JDMERGE.C の行数 = 400
+=====ファイル JQUANT1.C の行数 = 856
+=====ファイル JQUANT2.C の行数 = 1310
+=====ファイル JDATASRC.C の行数 = 212
+JERROR.C  31:  #ifndef EXIT_FAILURE		/* define exit() codes if not provided */
+JERROR.C  78:    exit(EXIT_FAILURE);
+=====ファイル JERROR.C の行数 = 252
+=====ファイル JMEMMGR.C の行数 = 1118
+=====ファイル JUTILS.C の行数 = 179
+=====ファイル JMEMNOBS.C の行数 = 109
+JHANDLE.C  41:   * as error recovery (the JPEG code will just exit() if it gets an error).
+JHANDLE.C  85:     * print a message on stderr and call exit() if compression fails.
+JHANDLE.C  239:   * rather than calling exit() as the standard error_exit method does.
+=====ファイル JHANDLE.C の行数 = 443
+=====ファイル JCHUFF.C の行数 = 909
+=====ファイル JCDCTMGR.C の行数 = 387
+=====ファイル JDMARKER.C の行数 = 1360
+=====ファイル JCPARAM.C の行数 = 610
+=====該当ファイルの総行数 = 21287
